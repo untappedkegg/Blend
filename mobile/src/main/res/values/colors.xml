@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="primary">@color/cerulean</color>
+    <color name="primary_dark">@color/tinted_cerulean</color>
+    <color name="accent">#df3b00</color>
+    <color name="accent3">#a72c00</color>
+    <color name="accent2">#a7007b</color>
+
+    <color name="cerulean">#007BA7</color>
+    <color name="tinted_cerulean">#006e96</color>
+    <color name="dark_cerulean">#006285</color>
+    <color name="darker_cerulean">#005674</color>
+
+    <color name="dim_foreground_light">#323232</color>
+    <color name="dim_foreground_light_translucent">#40000000</color>
+
+</resources>

@@ -1,11 +1,7 @@
 package com.untappedkegg.blend;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
-import android.provider.Telephony;
-import android.view.View;
-import android.widget.Button;
 
 
 public class ComposeSmsActivity extends Activity {
@@ -18,7 +14,7 @@ public class ComposeSmsActivity extends Activity {
     protected void onResume() {
         super.onResume();
 
-        final String myPackageName = getPackageName();
+        /*final String myPackageName = getPackageName();
         if (!Telephony.Sms.getDefaultSmsPackage(this).equals(myPackageName)) {
             // App is not default.
             // Show the "not currently set as the default SMS app" interface
@@ -41,7 +37,7 @@ public class ComposeSmsActivity extends Activity {
             // Hide the "not currently set as the default SMS app" interface
             View viewGroup = findViewById(R.id.not_default_app);
             viewGroup.setVisibility(View.GONE);
-        }
+        }*/
     }
 
 
