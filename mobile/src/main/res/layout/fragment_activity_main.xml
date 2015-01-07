@@ -13,10 +13,6 @@
         android:layout_height="fill_parent"
         android:orientation="vertical"
         android:weightSum="1">
-    <TextView
-        android:text="@string/hello_world"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
 
     <CheckBox
         android:layout_width="wrap_content"
@@ -31,55 +27,12 @@
             android:text="This is some more text in another message with text that wraps to a second line "
         style="@style/SentMessageTextView"/>
 
-
-
-        <!--
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Button"/>
-
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-
-                <Switch
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:checked="true"
-                    android:layout_marginBottom="20dp"
-                    android:layout_marginTop="20dp"
-                    android:text="Switch"/>
-
-
-                <ProgressBar
-                    style="?android:attr/progressBarStyleHorizontal"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/progressBar2"
-                    android:layout_gravity="center_horizontal"
-                    android:indeterminate="true" />
-        -->
-
+        <include layout="@layout/message_row_received"/>
+        <include layout="@layout/message_row_sent"/>
 
     </LinearLayout>
-    <Button
-        android:id="@+id/sms_one"
-        android:text="This is some text"
-        style="@style/ReceivedMessageTextView"
-        android:layout_marginBottom="15dp"
-        android:layout_above="@+id/sms_two"
-        android:longClickable="true">
-    </Button>
-    <Button
-        android:id="@+id/sms_two"
-        android:text="This is some more text in another message with text that wraps to a second line "
-        style="@style/SentMessageTextView"
-        android:layout_above="@+id/progress"
-        android:longClickable="true"
-        android:layout_alignParentRight="true">
-    </Button>
+
+
     <ProgressBar android:id="@+id/progress"
         style="?android:attr/progressBarStyleLarge"
         android:layout_width="wrap_content"
