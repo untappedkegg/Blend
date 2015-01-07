@@ -15,4 +15,35 @@
 
     </style>
 
+    <style name="ReceivedMessageTextView" >
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@drawable/msg_bubble_sent</item>
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:colorBackground">@color/accent</item>
+        <item name="android:layout_gravity">left|center_vertical</item>
+        <item name="android:layout_marginBottom">15dp</item>
+        <item name="android:layout_marginTop">3dp</item>
+    </style>
+
+    <style name="SentMessageTextView" parent="ReceivedMessageTextView" >
+        <item name="android:background">@drawable/msg_bubble_input</item>
+        <item name="android:layout_gravity">right|center_vertical</item>
+    </style>
+
+    <style name="MessageDate">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginLeft">25dp</item>
+        <item name="android:layout_marginRight">25dp</item>
+        <item name="android:layout_marginTop">10dp</item>
+        <item name="android:textColor">@android:color/black</item>
+
+    </style>
+
+    <style name="ContactBadge" >
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_margin">6dp</item>
+    </style>
 </resources>
