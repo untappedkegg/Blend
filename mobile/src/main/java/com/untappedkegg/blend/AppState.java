@@ -31,7 +31,7 @@ public class AppState extends Application {
     /**
      * @return the global Application instance.
      */
-    synchronized public static Application getApplication() {
+    public static Application getApplication() {
         return instance;
     }
 

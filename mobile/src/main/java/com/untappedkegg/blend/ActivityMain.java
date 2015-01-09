@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,6 +21,7 @@ import com.untappedkegg.blend.utils.MessageUtils;
 
 
 public class ActivityMain extends Activity {
+    private final String LOG_TAG = ActivityMain.class.getSimpleName();
 //    private Toolbar toolbar;
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle drawerToggle;
@@ -34,7 +36,7 @@ public class ActivityMain extends Activity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
-
+        Log.e(LOG_TAG, String.valueOf(AppState.getApplication()));
 //        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 //        this.setActionBar(toolbar);
         this.getActionBar().setDisplayHomeAsUpEnabled(true);
@@ -58,7 +60,7 @@ public class ActivityMain extends Activity {
         Uri uri = Uri.parse(MessageUtils.ALL);
          c= getContentResolver().query(uri, null, null, null, "date DESC");
 
-        MessageUtils.printColumnsToLog(c, false);
+//        MessageUtils.printColumnsToLog(c, false);
         MessageUtils.printMessagesToLog(c, false);
         // Read the sms data and store it in the list
 /*

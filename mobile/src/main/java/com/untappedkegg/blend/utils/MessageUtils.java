@@ -2,22 +2,29 @@ package com.untappedkegg.blend.utils;
 
 import android.content.ContentResolver;
 import android.content.ContentUris;
+import android.content.res.AssetFileDescriptor;
 import android.database.Cursor;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.provider.ContactsContract;
+import android.provider.ContactsContract.Contacts;
 import android.provider.ContactsContract.PhoneLookup;
 import android.util.Log;
 
 import com.untappedkegg.blend.AppState;
 import com.untappedkegg.blend.MmsConfig;
+import com.untappedkegg.blend.R;
 
 import java.io.ByteArrayInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 
 /**
  * Created by kyle on 1/7/15.
  */
 public final class MessageUtils {
+    private static final String LOG_TAG = MessageUtils.class.getSimpleName();
     /*----- CONSTANTS -----*/
     public static final String INBOX = "content://sms/inbox";
     public static final String FAILED = "content://sms/failed";
@@ -169,7 +176,7 @@ public final class MessageUtils {
 
         }
 
-        System.out.println(contactId);
+        Log.e(LOG_TAG, "Contact_ID = " + contactId);
 
         return contactId;
 
@@ -214,9 +221,23 @@ public final class MessageUtils {
 
     public static Uri getPhotoFromNumber(String phoneNumber) {
         try {
-            return getPhotoUri(Long.valueOf(fetchContactIdFromPhoneNumber(phoneNumber)));
+            final Uri returnUri = getPhotoUri(Long.valueOf(fetchContactIdFromPhoneNumber(phoneNumber)));
+            Log.e("Blend", String.valueOf(returnUri));
+            return returnUri;
         } catch (Exception e) {
             return null;
+        }
+
+    }
+
+    public static Drawable getDrawableFromNumber(String phoneNumber) {
+
+        final Uri returnUri = getPhotoUri(Long.valueOf(fetchContactIdFromPhoneNumber(phoneNumber)));
+        try {
+            InputStream inputStream = AppState.getApplication().getContentResolver().openInputStream(returnUri);
+            return Drawable.createFromStream(inputStream, returnUri.toString() );
+        } catch (FileNotFoundException e) {
+            return AppState.getApplication().getResources().getDrawable(R.drawable.ic_launcher);
         }
 
     }
@@ -238,8 +259,12 @@ public final class MessageUtils {
             cursor = AppState.getApplication().getContentResolver().query(uri, new String[]{PhoneLookup.DISPLAY_NAME}, null, null, null);
 
             cursor.moveToFirst();
-            return cursor.getString(cursor.getColumnIndex(PhoneLookup.DISPLAY_NAME));
+            final String name = cursor.getString(cursor.getColumnIndex(PhoneLookup.DISPLAY_NAME));
+            Log.w(LOG_TAG, name);
+            return name;
         } catch (Exception e) {
+            Log.e(LOG_TAG, phoneNum);
+            e.printStackTrace();
             return phoneNum;
         } finally {
             if (cursor != null && !cursor.isClosed())
@@ -247,5 +272,28 @@ public final class MessageUtils {
         }
 
     }
+
+    public static final String[] getContactInfo() {
+        // define the columns I want the query to return
+        String[] projection = new String[]{
+                ContactsContract.PhoneLookup.DISPLAY_NAME,
+                ContactsContract.PhoneLookup._ID};
+
+    return null;
+
+    }
+
+    public InputStream openDisplayPhoto(long contactId) {
+        Uri contactUri = ContentUris.withAppendedId(Contacts.CONTENT_URI, contactId);
+        Uri displayPhotoUri = Uri.withAppendedPath(contactUri, Contacts.Photo.DISPLAY_PHOTO);
+        try {
+            AssetFileDescriptor fd = AppState.getApplication().getContentResolver().openAssetFileDescriptor(displayPhotoUri, "r");
+            return fd.createInputStream();
+        } catch (IOException e) {
+//            return AppState.getApplication().getDrawable(R.drawable.ic_launcher);
+            return null;
+        }
+    }
+
 
 }

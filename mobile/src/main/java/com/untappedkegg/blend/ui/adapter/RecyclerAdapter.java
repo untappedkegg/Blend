@@ -88,7 +88,13 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
                 //27 m_id
                 final Uri photoUri = MessageUtils.getPhotoFromNumber(phoneNum);
                 if (photoUri != null) {
-                    holder.contactPhoto.setImageURI(photoUri);
+                    try {
+//                        holder.contactPhoto.setImageURI(photoUri);
+//                        holder.contactPhoto.setScaleType(ImageView.ScaleType.FIT_CENTER);
+                        holder.contactPhoto.setImageDrawable(MessageUtils.getDrawableFromNumber(phoneNum));
+                    } catch (Exception e) {
+                        holder.contactPhoto.setImageResource(R.drawable.ic_launcher);
+                    }
                 } else {
 //                    holder.contactPhoto.setVisibility(View.INVISIBLE);
                 }
