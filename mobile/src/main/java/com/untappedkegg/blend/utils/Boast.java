@@ -16,7 +16,18 @@ import android.widget.Toast;
  */
 public class Boast {
 
+    /**
+     * Show the view or text notification for a long period of time.  This time
+     * could be user-definable.
+     * @see Toast#setDuration
+     */
     public static final int LENGTH_LONG = Toast.LENGTH_LONG;
+
+    /**
+     * Show the view or text notification for a short period of time.  This time
+     * could be user-definable.  This is the default.
+     * @see Toast#setDuration
+     */
     public static final int LENGTH_SHORT = Toast.LENGTH_SHORT;
     /**
      * Keeps track of certain {@link Boast} notifications that may need to be cancelled.

@@ -7,7 +7,6 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -37,7 +36,6 @@ public class ActivityMain extends Activity implements OnConversationInteractionL
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
-        Log.e(LOG_TAG, String.valueOf(AppState.getApplication()));
 
         this.getActionBar().setDisplayHomeAsUpEnabled(true);
         getActionBar().setHomeButtonEnabled(true);
@@ -52,7 +50,7 @@ public class ActivityMain extends Activity implements OnConversationInteractionL
 
 
         if(savedInstanceState == null)  {
-            getFragmentManager().beginTransaction().add(R.id.container, new ConversationFragment()).commit();
+            attachFragment(new ConversationFragment(), false, null);
         }
 
 
@@ -116,6 +114,11 @@ public class ActivityMain extends Activity implements OnConversationInteractionL
     }
 
     private void attachFragment(Fragment fragment, boolean addToBackStack, Bundle args) {
+
+        if (args != null) {
+            fragment.setArguments(args);
+        }
+
         FragmentTransaction ft = getFragmentManager().beginTransaction();
                             ft.replace(R.id.container, fragment);
                         if (addToBackStack) {
