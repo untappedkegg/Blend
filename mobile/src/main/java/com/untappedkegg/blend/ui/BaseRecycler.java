@@ -25,7 +25,7 @@ public abstract class BaseRecycler extends Fragment{
 //        super.onCreateView(inflater, container, savedInstanceState);
 
 
-        View view = inflater.inflate(getLayout(), container, true);
+        View view = inflater.inflate(getLayout(), container, false);
 
         mRecyclerView = (RecyclerView) view.findViewById(getRecyclerId());
 

@@ -1,18 +1,22 @@
 package com.untappedkegg.blend;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.content.res.Configuration;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.view.LayoutInflater;
+import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+
+import com.untappedkegg.blend.ui.BaseRecycler;
+import com.untappedkegg.blend.ui.adapter.RecyclerAdapter;
+import com.untappedkegg.blend.utils.MessageUtils;
 
 
 public class ActivityMain extends Activity {
@@ -22,6 +26,7 @@ public class ActivityMain extends Activity {
     private ListView leftDrawerList;
     private ArrayAdapter<String> navigationDrawerAdapter;
     private String[] leftSliderData = {"Home", "Android", "Sitemap", "About", "Contact Me"};
+    private static Cursor c;
 
 
     @Override
@@ -48,13 +53,38 @@ public class ActivityMain extends Activity {
 //        }
         initDrawer();
 
-            if(savedInstanceState==null)
 
-            {
-                getFragmentManager().beginTransaction()
-                        .add(R.id.container, new PlaceholderFragment())
-                        .commit();
+
+        Uri uri = Uri.parse(MessageUtils.ALL);
+         c= getContentResolver().query(uri, null, null, null, "date DESC");
+
+        MessageUtils.printColumnsToLog(c, false);
+        MessageUtils.printMessagesToLog(c, false);
+        // Read the sms data and store it in the list
+/*
+        if(c.moveToFirst()) {
+            for(int i=0; i < c.getCount(); i++) {
+
+                Log.w(c.getString(0), c.getString(1) + " " + c.getString(2));
+
+
+                c.moveToNext();
             }
+        } else {
+            Log.e(getString(R.string.app_name), "Cursor is empty, exiting");
+            this.finish();
+        }
+        c.close();
+*/
+
+        if(savedInstanceState==null)
+
+        {
+            getFragmentManager().beginTransaction()
+                    .add(R.id.container, new PlaceholderFragment())
+                    .commit();
+        }
+
 
     }
 
@@ -117,16 +147,21 @@ public class ActivityMain extends Activity {
     /**
      * A placeholder fragment containing a simple view.
      */
-    public static class PlaceholderFragment extends Fragment {
+    public static class PlaceholderFragment extends BaseRecycler {
 
         public PlaceholderFragment() {
         }
 
         @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_activity_main, container, false);
-            return rootView;
+        protected RecyclerView.Adapter getAdapter() {
+            return new RecyclerAdapter(c, R.layout.generic_card);
         }
+
+//        @Override
+//        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+//                                 Bundle savedInstanceState) {
+//            View rootView = inflater.inflate(R.layout.fragment_activity_main, container, false);
+//            return rootView;
+//        }
     }
 }
