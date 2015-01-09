@@ -14,7 +14,7 @@ import com.untappedkegg.blend.R;
 /**
  * Created by kyle on 1/7/15.
  */
-public abstract class BaseRecyclerView extends Fragment implements View.OnClickListener {
+public abstract class BaseRecyclerView extends Fragment implements View.OnClickListener, View.OnLongClickListener {
     private RecyclerView mRecyclerView;
     private RecyclerView.LayoutManager mLayoutManager;
     protected boolean isLongClickable = false;

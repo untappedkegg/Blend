@@ -5,9 +5,7 @@ import android.app.Fragment;
 import android.database.Cursor;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -15,6 +13,7 @@ import android.widget.Toast;
 import com.untappedkegg.blend.R;
 import com.untappedkegg.blend.data.MessagesAdapter;
 import com.untappedkegg.blend.ui.BaseRecyclerView;
+import com.untappedkegg.blend.ui.adapter.BaseRecyclerAdapter;
 import com.untappedkegg.blend.utils.MessageUtils;
 
 import java.text.SimpleDateFormat;
@@ -57,21 +56,21 @@ public class ConversationFragment extends BaseRecyclerView {
 
     @Override
     protected RecyclerView.Adapter getAdapter() {
-        return new ConversationRecyclerAdapter(MessagesAdapter.readAllMessages(), R.layout.generic_card);
+        return new ConversationRecyclerAdapter(MessagesAdapter.readAllMessages(), R.layout.generic_card, true, this);
     }
 
     @Override
     public void onClick(View v) {
         // TODO get name and id
-        Toast.makeText(getActivity(), "Card Touched", Toast.LENGTH_LONG).show();
-        mListener.onConversationSelected(((TextView)v.findViewById(R.id.contact_name)).getText().toString(), ((TextView)v.findViewById(R.id.contact_id)).getText().toString());
+        Toast.makeText(getActivity(), "Card Touched; Name = " + ((TextView)v.findViewById(R.id.contact_name)).getText().toString() + " ID = " + ((TextView)v.findViewById(R.id.contact_id)).getText().toString(), Toast.LENGTH_LONG).show();
+//        mListener.onConversationSelected(((TextView)v.findViewById(R.id.contact_name)).getText().toString(), ((TextView)v.findViewById(R.id.contact_id)).getText().toString());
 
     }
 
-//    @Override
-//    public boolean onLongClick(View v) {
-//        return false;
-//    }
+    @Override
+    public boolean onLongClick(View v) {
+        return false;
+    }
 
     /**
      * This interface must be implemented by activities that contain this
@@ -88,14 +87,24 @@ public class ConversationFragment extends BaseRecyclerView {
     }
 
     /*----- NESTED CLASSES -----*/
-    public static class ConversationRecyclerAdapter extends RecyclerView.Adapter<ConversationRecyclerAdapter.ViewHolder> {
-        private Cursor c;
-        private int mLayout;
+    public static class ConversationRecyclerAdapter extends BaseRecyclerAdapter {
+
+        public ConversationRecyclerAdapter(Cursor cursor, int layoutId) {
+            super(cursor, layoutId);
+        }
+
+        public ConversationRecyclerAdapter(Cursor cursor, int layoutId, boolean clickable, View.OnClickListener clickListener) {
+            super(cursor, layoutId, clickable, clickListener);
+        }
+
+        public ConversationRecyclerAdapter(Cursor cursor, int layoutId, boolean clickable, boolean longClickable, View.OnClickListener clickListener, View.OnLongClickListener longClickListener) {
+            super(cursor, layoutId, clickable, longClickable, clickListener, longClickListener);
+        }
 
         // Provide a reference to the views for each data item
         // Complex data items may need more than one view per item, and
         // you provide access to all the views for a data item in a view holder
-        public static class ViewHolder extends RecyclerView.ViewHolder {
+        public static class ConvoViewHolder extends RecyclerView.ViewHolder {
             // each data item is just a string in this case
             public View mView;
             public TextView contactName;
@@ -105,7 +114,7 @@ public class ConversationFragment extends BaseRecyclerView {
             public ImageView contactPhoto;
 
 
-            public ViewHolder(View v) {
+            public ConvoViewHolder(View v) {
                 super(v);
                 mView = v;
 
@@ -119,33 +128,23 @@ public class ConversationFragment extends BaseRecyclerView {
             }
         }
 
-        // Provide a suitable constructor (depends on the kind of dataset)
-        public ConversationRecyclerAdapter(Cursor cursor, int layout) {
-            c = cursor;
-            mLayout = layout;
-        }
-
-        // Create new views (invoked by the layout manager)
         @Override
-        public ConversationRecyclerAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            // create a new view
-            View v = LayoutInflater.from(parent.getContext()).inflate(mLayout, parent, false);
-            // set the view's size, margins, padding and layout parameters
-
-            ViewHolder vh = new ViewHolder(v);
-            return vh;
+        protected RecyclerView.ViewHolder getViewHolder(View v) {
+            return new ConvoViewHolder(v);
         }
 
         // Replace the contents of a view (invoked by the layout manager)
         @Override
-        public void onBindViewHolder(ViewHolder holder, int position) {
+        public void onBindViewHolder(RecyclerView.ViewHolder mHolder, int position) {
+            //Must cast ViewHolder in order to access variabes
+            ConvoViewHolder holder = (ConvoViewHolder) mHolder;
             // - get element from your data set at this position
             // - replace the contents of the view with that element
-            if (c.moveToPosition(position)) {
+            if (mCursor.moveToPosition(position)) {
                 SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy hh:mm");
                 Calendar calendar = Calendar.getInstance();
-                calendar.setTimeInMillis(c.getLong(25));
-                final String phoneNum = c.getString(18);
+                calendar.setTimeInMillis(mCursor.getLong(25));
+                final String phoneNum = mCursor.getString(18);
                 final String id = MessageUtils.fetchContactIdFromPhoneNumber(phoneNum);
 
                 //27 m_id
@@ -161,24 +160,12 @@ public class ConversationFragment extends BaseRecyclerView {
                 }
                 holder.contactName.setText(MessageUtils.getContactName(phoneNum));
                 holder.msgDate.setText(formatter.format(calendar.getTime()));
-                holder.msgPreview.setText(c.getString(26));
+                holder.msgPreview.setText(mCursor.getString(26));
                 holder.contactId.setText(id);
             }
 
         }
 
-        // Return the size of your data set (invoked by the layout manager)
-        @Override
-        public int getItemCount() {
-            return c.getCount();
-        }
-
-        @Override
-        public void onDetachedFromRecyclerView(RecyclerView recyclerView) {
-            super.onDetachedFromRecyclerView(recyclerView);
-            if(c != null && !c.isClosed())
-                c.close();
-        }
     }
 
 }
