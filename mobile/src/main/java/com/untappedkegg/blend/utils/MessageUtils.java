@@ -159,7 +159,7 @@ public final class MessageUtils {
 
         }
 
-        Log.e(LOG_TAG, "Contact_ID = " + contactId);
+//        Log.e(LOG_TAG, "Contact_ID = " + contactId);
 
         return contactId;
 

@@ -8,12 +8,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.untappedkegg.blend.R;
 import com.untappedkegg.blend.data.MessagesAdapter;
 import com.untappedkegg.blend.ui.BaseRecyclerView;
 import com.untappedkegg.blend.ui.adapter.BaseRecyclerAdapter;
+import com.untappedkegg.blend.utils.Boast;
 import com.untappedkegg.blend.utils.MessageUtils;
 
 import java.text.SimpleDateFormat;
@@ -62,7 +62,8 @@ public class ConversationFragment extends BaseRecyclerView {
     @Override
     public void onClick(View v) {
         // TODO get name and id
-        Toast.makeText(getActivity(), "Card Touched; Name = " + ((TextView)v.findViewById(R.id.contact_name)).getText().toString() + " ID = " + ((TextView)v.findViewById(R.id.contact_id)).getText().toString(), Toast.LENGTH_LONG).show();
+
+        Boast.makeText(getActivity(), "Card Touched; Name = " + ((TextView) v.findViewById(R.id.contact_name)).getText().toString() + " ID = " + ((TextView) v.findViewById(R.id.contact_id)).getText().toString(), Boast.LENGTH_LONG).show();
 //        mListener.onConversationSelected(((TextView)v.findViewById(R.id.contact_name)).getText().toString(), ((TextView)v.findViewById(R.id.contact_id)).getText().toString());
 
     }
