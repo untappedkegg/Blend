@@ -14,10 +14,11 @@ import com.untappedkegg.blend.R;
 /**
  * Created by kyle on 1/7/15.
  */
-public abstract class BaseRecycler extends Fragment{
+public abstract class BaseRecyclerView extends Fragment implements View.OnClickListener {
     private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
+    protected boolean isLongClickable = false;
+    protected boolean isClickable = false;
 
     @Nullable
     @Override

@@ -25,24 +25,7 @@ import java.io.InputStream;
  */
 public final class MessageUtils {
     private static final String LOG_TAG = MessageUtils.class.getSimpleName();
-    /*----- CONSTANTS -----*/
-    public static final String INBOX = "content://sms/inbox";
-    public static final String FAILED = "content://sms/failed";
-    public static final String QUEUED = "content://sms/queued";
-    public static final String SENT = "content://sms/sent";
-    public static final String DRAFT = "content://sms/draft";
-    public static final String OUTBOX = "content://sms/outbox";
-    public static final String UNDELIVERED = "content://sms/undelivered";
-    public static final String SMS_ALL = "content://sms/all";
-    public static final String ALL = "content://mms-sms/conversations/";
-    public static final String CONVERSATIONS = "content://sms/conversations";
-    //Columns:
-    /*
-    * 0 = "msg_count"
-    * 1 = "thread_id"
-    * 2 = "snippet"
-    *
-    */
+
 
 
     /**
@@ -114,7 +97,7 @@ public final class MessageUtils {
             final String[] colNames = c.getColumnNames();
             final int colCount = c.getColumnCount();
             final int count = c.getCount();
-//            Log.e("Index", "Column_Name");
+            Log.e("Index", "Column_Name");
             for (int j = 0; j < count; j++) {
                 Log.e("========== BLEND", "New Message: ==============");
                 c.moveToPosition(j);
@@ -156,7 +139,7 @@ public final class MessageUtils {
         return null;
     }
 
-    private static String fetchContactIdFromPhoneNumber(String phoneNumber) {
+    public static final String fetchContactIdFromPhoneNumber(String phoneNumber) {
 
         Uri uri = Uri.withAppendedPath(PhoneLookup.CONTENT_FILTER_URI,
                 Uri.encode(phoneNumber));
@@ -182,8 +165,16 @@ public final class MessageUtils {
 
     }
 
+    public static final Uri getPhotoUri(String contactId) {
+        try {
+            return getPhotoUri(Long.parseLong(contactId));
+        } catch (Exception e) {
+            return null;
+        }
+    }
 
-    private static Uri getPhotoUri(long contactId) {
+
+    public static final Uri getPhotoUri(long contactId) {
         ContentResolver contentResolver = AppState.getApplication().getContentResolver();
 
         try {
@@ -222,7 +213,7 @@ public final class MessageUtils {
     public static Uri getPhotoFromNumber(String phoneNumber) {
         try {
             final Uri returnUri = getPhotoUri(Long.valueOf(fetchContactIdFromPhoneNumber(phoneNumber)));
-            Log.e("Blend", String.valueOf(returnUri));
+//            Log.e("Blend", String.valueOf(returnUri));
             return returnUri;
         } catch (Exception e) {
             return null;
@@ -260,11 +251,13 @@ public final class MessageUtils {
 
             cursor.moveToFirst();
             final String name = cursor.getString(cursor.getColumnIndex(PhoneLookup.DISPLAY_NAME));
-            Log.w(LOG_TAG, name);
+//            Log.w(LOG_TAG, name);
             return name;
         } catch (Exception e) {
-            Log.e(LOG_TAG, phoneNum);
-            e.printStackTrace();
+//            Log.e(LOG_TAG, phoneNum);
+            if (AppState.DEBUG) {
+                e.printStackTrace();
+            }
             return phoneNum;
         } finally {
             if (cursor != null && !cursor.isClosed())

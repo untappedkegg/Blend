@@ -23,6 +23,10 @@ public class AppState extends Application {
     /* ----- VARIABLES ----- */
     private static Application instance;
 
+    /*----- BUNDLE KEYS -----*/
+    public static final String KEY_MSG_ID = "message_id";
+    public static final String KEY_MSG_NAME = "message_name";
+
     /* ----- CONSTRUCTORS ----- */
     public AppState() {
         instance = this;
