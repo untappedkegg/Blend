@@ -57,8 +57,8 @@ public abstract class RecyclerCursorAdapter<VH extends RecyclerView.ViewHolder> 
 
     /**
      * Call when bind view with the cursor
-     * @param holder
-     * @param cursor
+     * @param holder The ViewHolder for the current view
+     * @param cursor Data Set cursor already pointing to the current position
      */
     public abstract void onBindViewHolder(VH holder, Cursor cursor);
 

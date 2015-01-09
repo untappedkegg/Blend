@@ -1,5 +1,6 @@
 package com.untappedkegg.blend.ui.adapter;
 
+import android.content.Context;
 import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -11,7 +12,7 @@ import android.view.ViewGroup;
 /**
  * Created by kyle on 1/9/15.
  */
-public abstract class BaseRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
+public abstract class BaseRecyclerAdapter extends RecyclerCursorAdapter{
     /*----- VARIABLES -----*/
     protected Cursor mCursor;
     private int mLayout;
@@ -22,19 +23,22 @@ public abstract class BaseRecyclerAdapter extends RecyclerView.Adapter<RecyclerV
     private OnLongClickListener mLongClickListener;
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public BaseRecyclerAdapter(Cursor cursor, int layoutId) {
+    public BaseRecyclerAdapter(Context ctx, Cursor cursor, int layoutId) {
+        super(ctx, cursor, 0);
         this.mCursor = cursor;
         this.mLayout = layoutId;
     }
 
-    public BaseRecyclerAdapter(Cursor cursor, int layoutId, boolean clickable, OnClickListener clickListener) {
+    public BaseRecyclerAdapter(Context ctx, Cursor cursor, int layoutId, boolean clickable, OnClickListener clickListener) {
+        super(ctx, cursor, 0);
         this.mCursor = cursor;
         this.mLayout = layoutId;
         this.clickable = clickable;
         this.mClickListener = clickListener;
     }
 
-    public BaseRecyclerAdapter(Cursor cursor, int layoutId, boolean clickable, boolean longClickable, OnClickListener clickListener, OnLongClickListener longClickListener) {
+    public BaseRecyclerAdapter(Context ctx, Cursor cursor, int layoutId, boolean clickable, boolean longClickable, OnClickListener clickListener, OnLongClickListener longClickListener) {
+        super(ctx, cursor, 0);
         this.mCursor = cursor;
         this.mLayout = layoutId;
         this.clickable = clickable;
@@ -71,18 +75,12 @@ public abstract class BaseRecyclerAdapter extends RecyclerView.Adapter<RecyclerV
         return vh;
     }
 
-    // Return the size of your data set (invoked by the layout manager)
-    @Override
-    public int getItemCount() {
-        return mCursor.getCount();
-    }
-
-    @Override
-    public void onDetachedFromRecyclerView(RecyclerView recyclerView) {
-        super.onDetachedFromRecyclerView(recyclerView);
-        if(mCursor != null && !mCursor.isClosed())
-            mCursor.close();
-    }
+//    @Override
+//    public void onDetachedFromRecyclerView(RecyclerView recyclerView) {
+//        super.onDetachedFromRecyclerView(recyclerView);
+//        if(mCursor != null && !mCursor.isClosed())
+//            mCursor.close();
+//    }
 
     protected abstract RecyclerView.ViewHolder getViewHolder( View v);
 }
