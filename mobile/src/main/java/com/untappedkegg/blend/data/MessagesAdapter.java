@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.provider.ContactsContract;
 import android.util.Log;
 
 import com.untappedkegg.blend.AppState;
@@ -75,6 +76,10 @@ public class MessagesAdapter {
 
     public static final Cursor readAllMessages() {
        return ctx.getContentResolver().query(Uri.parse(QUERY_ALL), null, null, null, "date DESC");
+    }
+
+    public static final Cursor readThreadMessages(String contactId) {
+        return ctx.getContentResolver().query(Uri.parse(QUERY_ALL), null, String.format("%s == %s", ContactsContract.PhoneLookup._ID, contactId), null, "date DESC");
     }
 
     public static ArrayList conversationsToArrayList() {
