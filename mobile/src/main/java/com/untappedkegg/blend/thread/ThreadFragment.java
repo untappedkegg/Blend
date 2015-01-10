@@ -32,7 +32,6 @@ public class ThreadFragment extends BaseRecyclerView {
     protected RecyclerViewAdapter getAdapter() {
         return null;
     }
-
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
@@ -47,7 +46,7 @@ public class ThreadFragment extends BaseRecyclerView {
             mListener = (OnThreadInteractionListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
-                    + " must implement" +  OnThreadInteractionListener.class.getSimpleName());
+                    + " must implement " +  OnThreadInteractionListener.class.getSimpleName());
         }
     }
 
@@ -110,6 +109,7 @@ public class ThreadFragment extends BaseRecyclerView {
     public interface OnThreadInteractionListener {
         // TODO: Update argument type and name
         public void onFragmentInteraction(Uri uri);
+
     }
 
 }

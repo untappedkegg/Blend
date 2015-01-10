@@ -47,9 +47,7 @@ public class MessagesAdapter {
             this.snippet = snippet;
             this.threadId = threadId;
             this.photoUri = photoUri;
-
         }
-
     }
 
     public static class Conversation {
@@ -77,7 +75,6 @@ public class MessagesAdapter {
 
     public static final Cursor readAllMessages() {
        return ctx.getContentResolver().query(Uri.parse(QUERY_ALL), null, null, null, "date DESC");
-
     }
 
     public static ArrayList conversationsToArrayList() {

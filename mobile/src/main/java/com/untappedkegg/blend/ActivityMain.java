@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -18,7 +19,7 @@ import com.untappedkegg.blend.conversations.ConversationFragment.OnConversationI
 import com.untappedkegg.blend.thread.ThreadFragment;
 
 
-public class ActivityMain extends Activity implements OnConversationInteractionListener {
+public class ActivityMain extends Activity implements OnConversationInteractionListener, ThreadFragment.OnThreadInteractionListener {
     /*----- CONSTANTS -----*/
     private final String LOG_TAG = ActivityMain.class.getSimpleName();
 
@@ -135,5 +136,10 @@ public class ActivityMain extends Activity implements OnConversationInteractionL
         bundle.putString(AppState.KEY_MSG_NAME, name);
         bundle.putString(AppState.KEY_MSG_ID, id);
         attachFragment(new ThreadFragment(), true, bundle);
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
     }
 }

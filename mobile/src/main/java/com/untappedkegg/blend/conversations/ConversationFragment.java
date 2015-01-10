@@ -45,6 +45,7 @@ public class ConversationFragment extends BaseRecyclerView {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
+
         try {
             mListener = (OnConversationInteractionListener) activity;
         } catch (ClassCastException e) {
@@ -103,12 +104,11 @@ public class ConversationFragment extends BaseRecyclerView {
     @Override
     public void onItemClick(RecyclerView parent, View v, int position) {
         Boast.makeText(getActivity(), "Card Touched; Name = " + ((TextView) v.findViewById(R.id.contact_name)).getText().toString() + " ID = " + ((TextView) v.findViewById(R.id.contact_id)).getText().toString(), Boast.LENGTH_LONG).show();
-//
+        mListener.onConversationSelected(((TextView) v.findViewById(R.id.contact_name)).getText().toString(), ((TextView) v.findViewById(R.id.contact_id)).getText().toString());
     }
 
     @Override
     public void onItemLongClick(RecyclerView parent, View clickedView, int position) {
-
         Boast.makeText(getActivity(), "Long Clicked").show();
     }
 
