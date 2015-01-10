@@ -2,26 +2,23 @@ package com.untappedkegg.blend.conversations;
 
 import android.app.Activity;
 import android.app.Fragment;
-import android.content.Context;
-import android.database.Cursor;
-import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.ActionMode;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.untappedkegg.blend.R;
 import com.untappedkegg.blend.data.MessagesAdapter;
 import com.untappedkegg.blend.ui.BaseRecyclerView;
-import com.untappedkegg.blend.ui.adapter.BaseRecyclerAdapter;
+import com.untappedkegg.blend.ui.recyclerviewextentions.RecyclerViewAdapter;
 import com.untappedkegg.blend.utils.Boast;
-import com.untappedkegg.blend.utils.MessageUtils;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -62,8 +59,8 @@ public class ConversationFragment extends BaseRecyclerView {
 
     @Override
     protected RecyclerView.Adapter getAdapter() {
-        return new ConversationRecyclerAdapter(getActivity(), MessagesAdapter.readAllMessages(), R.layout.generic_card);
-//        return new ConversationRecyclerAdapter();
+//        return new ConversationRecyclerAdapter(getActivity(), MessagesAdapter.readAllMessages(), R.layout.generic_card);
+        return new ConversationRecyclerAdapter();
     }
 
 //    @Override
@@ -103,6 +100,7 @@ public class ConversationFragment extends BaseRecyclerView {
 
     @Override
     public void onItemClick(RecyclerView parent, View v, int position) {
+//        v.setElevation(500);
         Boast.makeText(getActivity(), "Card Touched; Name = " + ((TextView) v.findViewById(R.id.contact_name)).getText().toString() + " ID = " + ((TextView) v.findViewById(R.id.contact_id)).getText().toString(), Boast.LENGTH_LONG).show();
         mListener.onConversationSelected(((TextView) v.findViewById(R.id.contact_name)).getText().toString(), ((TextView) v.findViewById(R.id.contact_id)).getText().toString());
     }
@@ -127,12 +125,12 @@ public class ConversationFragment extends BaseRecyclerView {
     }
 
     /*----- NESTED CLASSES -----*/
-/*
+
     public static class ConversationRecyclerAdapter extends RecyclerViewAdapter {
 
         ArrayList<MessagesAdapter.Conversation> items;
         ConversationRecyclerAdapter() {
-            items = MessagesAdapter.conversationsToArrayList();
+                items = new ArrayList<>(MessagesAdapter.conversationsToArrayList()); //MessagesAdapter.conversationsToArrayList();
 
         }
 
@@ -174,7 +172,7 @@ public class ConversationFragment extends BaseRecyclerView {
         protected void onBindViewData(RecyclerView.ViewHolder viewHolder, int position) {
             //Must cast ViewHolder in order to access variabes
             ConvoViewHolder mHolder = (ConvoViewHolder) viewHolder;
-            Conversation mConvo = items.get(position);
+            MessagesAdapter.Conversation mConvo = items.get(position);
 
 
                 try {
@@ -182,7 +180,7 @@ public class ConversationFragment extends BaseRecyclerView {
                 } catch (Exception e) {
                     mHolder.contactPhoto.setImageResource(R.drawable.ic_launcher);
                 }
-
+//            Log.e("Conversation", items.get(position).name + "");
             mHolder.contactName.setText(mConvo.name);
             mHolder.msgDate.setText(mConvo.date);
             mHolder.msgPreview.setText(mConvo.snippet);
@@ -200,8 +198,8 @@ public class ConversationFragment extends BaseRecyclerView {
             return items.size();
         }
     }
-*/
 
+/*
     public static class ConversationRecyclerAdapter extends BaseRecyclerAdapter {
 
         public ConversationRecyclerAdapter(Context ctx, Cursor cursor, int layoutId) {
@@ -284,5 +282,5 @@ public class ConversationFragment extends BaseRecyclerView {
         }
 
     }
-
+*/
 }

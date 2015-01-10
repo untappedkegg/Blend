@@ -4,7 +4,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.provider.ContactsContract;
 import android.util.Log;
 
 import com.untappedkegg.blend.AppState;
@@ -19,6 +18,8 @@ import java.util.Calendar;
  */
 public class MessagesAdapter {
     /*----- CONSTANTS -----*/
+    final static String LOG_TAG = MessagesAdapter.class.getSimpleName();
+
     public static final String QUEUERY_INBOX = "content://sms/inbox/";
     public static final String QUEUERY_FAILED = "content://sms/failed/";
     public static final String QUEUERY_QUEUED = "content://sms/queued/";
@@ -52,12 +53,12 @@ public class MessagesAdapter {
     }
 
     public static class Conversation {
-        public static String name;
-        public static String messageCount;
-        public static String threadId;
-        public static String snippet;
-        public static String date;
-        public static Drawable photo;
+        public String name;
+        public String messageCount;
+        public String threadId;
+        public String snippet;
+        public String date;
+        public Drawable photo;
 
          public Conversation(String name, String msgCount, String threadId, String snippet, String date, Drawable photo)  {
              this.name = name;
@@ -68,6 +69,8 @@ public class MessagesAdapter {
              this.photo = photo;
 
          }
+
+//        public static String getName() {return name;}
 
     }
 
@@ -82,7 +85,7 @@ public class MessagesAdapter {
         return ctx.getContentResolver().query(Uri.parse(QUERY_ALL), null, String.format("%s == %s", ContactsContract.PhoneLookup._ID, contactId), null, "date DESC");
     }
 
-    public static ArrayList conversationsToArrayList() {
+    public static ArrayList<Conversation> conversationsToArrayList() {
 
 
         final Cursor c = ctx.getContentResolver().query(Uri.parse(QUERY_ALL), null, null, null, "date DESC");
@@ -99,8 +102,8 @@ public class MessagesAdapter {
                 SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy hh:mm");
                 Calendar calendar = Calendar.getInstance();
                 calendar.setTimeInMillis(c.getLong(25));
-
-                mList.add(new Conversation(MessageUtils.getContactName(phoneNumber) ,null, MessageUtils.fetchContactIdFromPhoneNumber(phoneNumber), c.getString(26), formatter.format(calendar.getTime()), MessageUtils.getDrawableFromNumber(phoneNumber)));
+//                Log.e(LOG_TAG, String.format("name = %s, Thread_ID = %s, Snippet = %s, date = %s, photo = %s", MessageUtils.getContactName(phoneNumber) , MessageUtils.fetchContactIdFromPhoneNumber(phoneNumber), c.getString(26), formatter.format(calendar.getTime()), MessageUtils.getDrawableFromNumber(phoneNumber).toString()));
+                mList.add(new Conversation(MessageUtils.getContactName(phoneNumber) ,null, /*MessageUtils.fetchContactIdFromPhoneNumber(phoneNumber)*/ c.getString(31), c.getString(26), formatter.format(calendar.getTime()), MessageUtils.getDrawableFromNumber(phoneNumber)));
 
             }
             c.close();
