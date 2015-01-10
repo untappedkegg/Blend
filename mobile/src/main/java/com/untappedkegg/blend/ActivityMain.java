@@ -16,7 +16,9 @@ import android.widget.ListView;
 
 import com.untappedkegg.blend.conversations.ConversationFragment;
 import com.untappedkegg.blend.conversations.ConversationFragment.OnConversationInteractionListener;
+import com.untappedkegg.blend.data.MessagesAdapter;
 import com.untappedkegg.blend.thread.ThreadFragment;
+import com.untappedkegg.blend.utils.MessageUtils;
 
 
 public class ActivityMain extends Activity implements OnConversationInteractionListener, ThreadFragment.OnThreadInteractionListener {
@@ -54,7 +56,7 @@ public class ActivityMain extends Activity implements OnConversationInteractionL
             attachFragment(new ConversationFragment(), false, null);
         }
 
-
+        MessageUtils.printMessagesToLog(MessagesAdapter.readAllMessages(), true);
     }
 
     @Override
