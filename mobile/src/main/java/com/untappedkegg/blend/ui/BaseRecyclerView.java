@@ -5,20 +5,26 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.untappedkegg.blend.R;
+import com.untappedkegg.blend.ui.recyclerviewextentions.ItemTouchListenerAdapter;
+import com.untappedkegg.blend.ui.recyclerviewextentions.SwipeToDismissTouchListener;
+
+import java.util.List;
 
 /**
  * Created by kyle on 1/7/15.
  */
-public abstract class BaseRecyclerView extends Fragment implements View.OnClickListener, View.OnLongClickListener {
-    private RecyclerView mRecyclerView;
+public abstract class BaseRecyclerView extends Fragment implements ItemTouchListenerAdapter.RecyclerViewOnItemClickListener, ActionMode.Callback {
+    protected RecyclerView mRecyclerView;
     private RecyclerView.LayoutManager mLayoutManager;
-    protected boolean isLongClickable = false;
+    private RecyclerView.Adapter adapter;
     protected boolean isClickable = false;
+    protected boolean swipeToDismiss = false;
 
     @Nullable
     @Override
@@ -39,7 +45,9 @@ public abstract class BaseRecyclerView extends Fragment implements View.OnClickL
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         // specify an adapter (see also next example)
-        mRecyclerView.setAdapter(getAdapter());
+        adapter = getAdapter();
+        mRecyclerView.setAdapter(adapter);
+        setRecyclerViewOptions();
         return view;
     }
 
@@ -64,6 +72,36 @@ public abstract class BaseRecyclerView extends Fragment implements View.OnClickL
     }
 
     protected abstract RecyclerView.Adapter getAdapter();
+
+    /**
+     * {@see https://github.com/ismoli/DynamicRecyclerView}
+     */
+    protected void setRecyclerViewOptions() {
+
+        if (swipeToDismiss) {
+            mRecyclerView.addOnItemTouchListener(new SwipeToDismissTouchListener(mRecyclerView, new SwipeToDismissTouchListener.DismissCallbacks() {
+                @Override
+                public SwipeToDismissTouchListener.SwipeDirection canDismiss(int position) {
+                    return SwipeToDismissTouchListener.SwipeDirection.BOTH;
+                }
+
+                @Override
+                public void onDismiss(RecyclerView view, List<SwipeToDismissTouchListener.PendingDismissData> dismissData) {
+                    for (SwipeToDismissTouchListener.PendingDismissData data : dismissData) {
+//                        adapter.removeItem(data.position);
+                        adapter.notifyItemRemoved(data.position);
+                    }
+                }
+            }));
+        }
+
+        if (isClickable) {
+            mRecyclerView.addOnItemTouchListener(new ItemTouchListenerAdapter(mRecyclerView, this));
+
+        }
+
+
+    }
 
 
 }

@@ -31,7 +31,7 @@ import java.util.Set;
 /**
  * An interface for finding information about conversations and/or creating new ones.
  */
-public class Conversation {
+public class ConversationTools {
     private static final String TAG = LogTag.TAG;
 
     public static final Uri sAllThreadsUri =
@@ -89,7 +89,7 @@ public class Conversation {
     private boolean mMarkAsReadBlocked;
     private boolean mMarkAsReadWaiting;
 
-    private Conversation(Context context) {
+    private ConversationTools(Context context) {
         mContext = context;
         mRecipients = new ContactList();
         mThreadId = 0;
@@ -121,18 +121,18 @@ public class Conversation {
      * be called as many times as you like; the conversation will not be
      * created in the database until {@link #ensureThreadId} is called.
      */
-    public static Conversation createNew(Context context) {
-        return new Conversation(context);
+    public static ConversationTools createNew(Context context) {
+        return new ConversationTools(context);
     }
 
     /**
      * Find the conversation matching the provided thread ID.
      */
-    public static Conversation get(Context context, long threadId, boolean allowQuery) {
+    public static ConversationTools get(Context context, long threadId, boolean allowQuery) {
         if (AppState.DEBUG) {
             Log.v(TAG, "Conversation get by threadId: " + threadId);
         }
-        Conversation conv = Cache.get(threadId);
+        ConversationTools conv = Cache.get(threadId);
         if (conv != null)
             return conv;
 
@@ -674,7 +674,7 @@ public class Conversation {
     @Override
     public synchronized boolean equals(Object obj) {
         try {
-            Conversation other = (Conversation)obj;
+            ConversationTools other = (ConversationTools)obj;
             return (mRecipients.equals(other.mRecipients));
         } catch (ClassCastException e) {
             return false;
@@ -930,21 +930,21 @@ public class Conversation {
     private static class Cache {
         private static Cache sInstance = new Cache();
         static Cache getInstance() { return sInstance; }
-        private final HashSet<Conversation> mCache;
+        private final HashSet<ConversationTools> mCache;
         private Cache() {
-            mCache = new HashSet<Conversation>(10);
+            mCache = new HashSet<ConversationTools>(10);
         }
 
         /**
          * Return the conversation with the specified thread ID, or
          * null if it's not in cache.
          */
-        static Conversation get(long threadId) {
+        static ConversationTools get(long threadId) {
             synchronized (sInstance) {
                 if (Log.isLoggable(LogTag.THREAD_CACHE, Log.VERBOSE)) {
                     LogTag.debug("Conversation get with threadId: " + threadId);
                 }
-                for (Conversation c : sInstance.mCache) {
+                for (ConversationTools c : sInstance.mCache) {
                     if (AppState.DEBUG) {
                         LogTag.debug("Conversation get() threadId: " + threadId +
                                 " c.getThreadId(): " + c.getThreadId());
@@ -961,12 +961,12 @@ public class Conversation {
          * Return the conversation with the specified recipient
          * list, or null if it's not in cache.
          */
-        static Conversation get(ContactList list) {
+        static ConversationTools get(ContactList list) {
             synchronized (sInstance) {
                 if (Log.isLoggable(LogTag.THREAD_CACHE, Log.VERBOSE)) {
                     LogTag.debug("Conversation get with ContactList: " + list);
                 }
-                for (Conversation c : sInstance.mCache) {
+                for (ConversationTools c : sInstance.mCache) {
                     if (c.getRecipients().equals(list)) {
                         return c;
                     }
@@ -980,7 +980,7 @@ public class Conversation {
          * should not place an already-existing conversation in the
          * cache, but rather update it in place.
          */
-        static void put(Conversation c) {
+        static void put(ConversationTools c) {
             synchronized (sInstance) {
                 // We update cache entries in place so people with long-
                 // held references get updated.
@@ -1008,7 +1008,7 @@ public class Conversation {
          * we remove the stale entry and add the new one. Returns true if the operation is
          * successful
          */
-        static boolean replace(Conversation c) {
+        static boolean replace(ConversationTools c) {
             synchronized (sInstance) {
                 if (Log.isLoggable(LogTag.THREAD_CACHE, Log.VERBOSE)) {
                     LogTag.debug("Conversation.Cache.put: conv= " + c + ", hash: " + c.hashCode());
@@ -1037,7 +1037,7 @@ public class Conversation {
                     LogTag.debug("remove threadid: " + threadId);
                     dumpCache();
                 }
-                for (Conversation c : sInstance.mCache) {
+                for (ConversationTools c : sInstance.mCache) {
                     if (c.getThreadId() == threadId) {
                         sInstance.mCache.remove(c);
                         return;
@@ -1049,7 +1049,7 @@ public class Conversation {
         static void dumpCache() {
             synchronized (sInstance) {
                 LogTag.debug("Conversation dumpCache: ");
-                for (Conversation c : sInstance.mCache) {
+                for (ConversationTools c : sInstance.mCache) {
                     LogTag.debug("   conv: " + c.toString() + " hash: " + c.hashCode());
                 }
             }
@@ -1061,9 +1061,9 @@ public class Conversation {
          */
         static void keepOnly(Set<Long> threads) {
             synchronized (sInstance) {
-                Iterator<Conversation> iter = sInstance.mCache.iterator();
+                Iterator<ConversationTools> iter = sInstance.mCache.iterator();
                 while (iter.hasNext()) {
-                    Conversation c = iter.next();
+                    ConversationTools c = iter.next();
                     if (!threads.contains(c.getThreadId())) {
                         iter.remove();
                     }

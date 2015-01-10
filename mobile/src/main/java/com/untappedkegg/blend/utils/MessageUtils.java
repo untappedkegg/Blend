@@ -16,7 +16,6 @@ import com.untappedkegg.blend.MmsConfig;
 import com.untappedkegg.blend.R;
 
 import java.io.ByteArrayInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -223,11 +222,12 @@ public final class MessageUtils {
 
     public static Drawable getDrawableFromNumber(String phoneNumber) {
 
-        final Uri returnUri = getPhotoUri(Long.valueOf(fetchContactIdFromPhoneNumber(phoneNumber)));
+
         try {
+            final Uri returnUri = getPhotoUri(Long.valueOf(fetchContactIdFromPhoneNumber(phoneNumber)));
             InputStream inputStream = AppState.getApplication().getContentResolver().openInputStream(returnUri);
             return Drawable.createFromStream(inputStream, returnUri.toString() );
-        } catch (FileNotFoundException e) {
+        } catch (Exception e) {
             return AppState.getApplication().getResources().getDrawable(R.drawable.ic_launcher);
         }
 

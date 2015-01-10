@@ -4,9 +4,13 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
+import android.view.ActionMode;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.untappedkegg.blend.ui.BaseRecyclerView;
+import com.untappedkegg.blend.ui.recyclerviewextentions.RecyclerViewAdapter;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -20,12 +24,12 @@ public class ThreadFragment extends BaseRecyclerView {
 
     public ThreadFragment() {
         // Required empty public constructor
-        this.isLongClickable = true;
+        this.isClickable = true;
     }
 
 
     @Override
-    protected RecyclerView.Adapter getAdapter() {
+    protected RecyclerViewAdapter getAdapter() {
         return null;
     }
 
@@ -53,14 +57,44 @@ public class ThreadFragment extends BaseRecyclerView {
         mListener = null;
     }
 
+//    @Override
+//    public void onClick(View v) {
+//
+//    }
+//
+//    @Override
+//    public boolean onLongClick(View v) {
+//        return false;
+//    }
+
     @Override
-    public void onClick(View v) {
+    public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+        return false;
+    }
+
+    @Override
+    public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+        return false;
+    }
+
+    @Override
+    public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+        return false;
+    }
+
+    @Override
+    public void onDestroyActionMode(ActionMode mode) {
 
     }
 
     @Override
-    public boolean onLongClick(View v) {
-        return false;
+    public void onItemClick(RecyclerView parent, View clickedView, int position) {
+
+    }
+
+    @Override
+    public void onItemLongClick(RecyclerView parent, View clickedView, int position) {
+
     }
 
     /**

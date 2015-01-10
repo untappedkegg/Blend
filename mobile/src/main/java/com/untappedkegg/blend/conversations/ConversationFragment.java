@@ -6,6 +6,9 @@ import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
+import android.view.ActionMode;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -33,6 +36,7 @@ public class ConversationFragment extends BaseRecyclerView {
 
     public ConversationFragment() {
         this.isClickable = true;
+        this.swipeToDismiss = true;
         // Required empty public constructor
     }
 
@@ -57,21 +61,55 @@ public class ConversationFragment extends BaseRecyclerView {
 
     @Override
     protected RecyclerView.Adapter getAdapter() {
-        return new ConversationRecyclerAdapter(getActivity(), MessagesAdapter.readAllMessages(), R.layout.generic_card, true, this);
+        return new ConversationRecyclerAdapter(getActivity(), MessagesAdapter.readAllMessages(), R.layout.generic_card);
+//        return new ConversationRecyclerAdapter();
     }
 
+//    @Override
+//    public void onClick(View v) {
+//        // TODO get name and id
+//
+//        Boast.makeText(getActivity(), "Card Touched; Name = " + ((TextView) v.findViewById(R.id.contact_name)).getText().toString() + " ID = " + ((TextView) v.findViewById(R.id.contact_id)).getText().toString(), Boast.LENGTH_LONG).show();
+////        mListener.onConversationSelected(((TextView)v.findViewById(R.id.contact_name)).getText().toString(), ((TextView)v.findViewById(R.id.contact_id)).getText().toString());
+//
+//    }
+
+//    @Override
+//    public boolean onLongClick(View v) {
+//        Boast.makeText(getActivity(), "Long Clicked").show();
+//        return true;
+//    }
+
     @Override
-    public void onClick(View v) {
-        // TODO get name and id
-
-        Boast.makeText(getActivity(), "Card Touched; Name = " + ((TextView) v.findViewById(R.id.contact_name)).getText().toString() + " ID = " + ((TextView) v.findViewById(R.id.contact_id)).getText().toString(), Boast.LENGTH_LONG).show();
-//        mListener.onConversationSelected(((TextView)v.findViewById(R.id.contact_name)).getText().toString(), ((TextView)v.findViewById(R.id.contact_id)).getText().toString());
-
-    }
-
-    @Override
-    public boolean onLongClick(View v) {
+    public boolean onCreateActionMode(ActionMode mode, Menu menu) {
         return false;
+    }
+
+    @Override
+    public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+        return false;
+    }
+
+    @Override
+    public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+        return false;
+    }
+
+    @Override
+    public void onDestroyActionMode(ActionMode mode) {
+
+    }
+
+    @Override
+    public void onItemClick(RecyclerView parent, View v, int position) {
+        Boast.makeText(getActivity(), "Card Touched; Name = " + ((TextView) v.findViewById(R.id.contact_name)).getText().toString() + " ID = " + ((TextView) v.findViewById(R.id.contact_id)).getText().toString(), Boast.LENGTH_LONG).show();
+//
+    }
+
+    @Override
+    public void onItemLongClick(RecyclerView parent, View clickedView, int position) {
+
+        Boast.makeText(getActivity(), "Long Clicked").show();
     }
 
     /**
@@ -89,10 +127,93 @@ public class ConversationFragment extends BaseRecyclerView {
     }
 
     /*----- NESTED CLASSES -----*/
+/*
+    public static class ConversationRecyclerAdapter extends RecyclerViewAdapter {
+
+        ArrayList<MessagesAdapter.Conversation> items;
+        ConversationRecyclerAdapter() {
+            items = MessagesAdapter.conversationsToArrayList();
+
+        }
+
+        public static class ConvoViewHolder extends RecyclerView.ViewHolder {
+            // each data item is just a string in this case
+            public View mView;
+            public TextView contactName;
+            public TextView msgPreview;
+            public TextView msgDate;
+            public TextView contactId;
+            public ImageView contactPhoto;
+
+
+            public ConvoViewHolder(View v) {
+                super(v);
+                mView = v;
+
+                contactName = (TextView) v.findViewById(R.id.contact_name);
+                msgPreview = (TextView) v.findViewById(R.id.contact_msg_preview);
+                msgDate = (TextView) v.findViewById(R.id.contact_msg_date);
+                contactPhoto = (ImageView) v.findViewById(R.id.contact_photo);
+                contactId = (TextView) v.findViewById(R.id.contact_id);
+
+            }
+        }
+
+
+        @Override
+        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            // create a new view
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.generic_card, parent, false);
+            // set the view's size, margins, padding and layout parameters
+
+            RecyclerView.ViewHolder vh = new ConvoViewHolder(v);
+            return vh;
+        }
+
+        @Override
+        protected void onBindViewData(RecyclerView.ViewHolder viewHolder, int position) {
+            //Must cast ViewHolder in order to access variabes
+            ConvoViewHolder mHolder = (ConvoViewHolder) viewHolder;
+            Conversation mConvo = items.get(position);
+
+
+                try {
+                    mHolder.contactPhoto.setImageDrawable(mConvo.photo);
+                } catch (Exception e) {
+                    mHolder.contactPhoto.setImageResource(R.drawable.ic_launcher);
+                }
+
+            mHolder.contactName.setText(mConvo.name);
+            mHolder.msgDate.setText(mConvo.date);
+            mHolder.msgPreview.setText(mConvo.snippet);
+            mHolder.contactId.setText(mConvo.threadId);
+        }
+
+        @Override
+        public void removeItem(int position) {
+            items.remove(position);
+        }
+
+
+        @Override
+        public int getItemCount() {
+            return items.size();
+        }
+    }
+*/
+
     public static class ConversationRecyclerAdapter extends BaseRecyclerAdapter {
+
+        public ConversationRecyclerAdapter(Context ctx, Cursor cursor, int layoutId) {
+            super(ctx, cursor, layoutId);
+        }
 
         public ConversationRecyclerAdapter(Context ctx, Cursor cursor, int layoutId, boolean clickable, View.OnClickListener clickListener) {
             super(ctx, cursor, layoutId, clickable, clickListener);
+        }
+
+        public ConversationRecyclerAdapter(Context ctx, Cursor cursor, int layoutId, boolean clickable, boolean longClickable, View.OnClickListener clickListener) {
+            super(ctx, cursor, layoutId, clickable, longClickable, clickListener);
         }
 
         // Provide a reference to the views for each data item

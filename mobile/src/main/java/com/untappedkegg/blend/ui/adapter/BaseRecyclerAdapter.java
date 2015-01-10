@@ -6,7 +6,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 
 /**
@@ -20,7 +19,7 @@ public abstract class BaseRecyclerAdapter extends RecyclerCursorAdapter{
     private boolean clickable = false;
     private boolean longClickable = false;
     private OnClickListener mClickListener;
-    private OnLongClickListener mLongClickListener;
+//    private OnLongClickListener mLongClickListener;
 
     // Provide a suitable constructor (depends on the kind of dataset)
     public BaseRecyclerAdapter(Context ctx, Cursor cursor, int layoutId) {
@@ -37,14 +36,14 @@ public abstract class BaseRecyclerAdapter extends RecyclerCursorAdapter{
         this.mClickListener = clickListener;
     }
 
-    public BaseRecyclerAdapter(Context ctx, Cursor cursor, int layoutId, boolean clickable, boolean longClickable, OnClickListener clickListener, OnLongClickListener longClickListener) {
+    public BaseRecyclerAdapter(Context ctx, Cursor cursor, int layoutId, boolean clickable, boolean longClickable, OnClickListener clickListener/*, OnLongClickListener longClickListener*/) {
         super(ctx, cursor, 0);
         this.mCursor = cursor;
         this.mLayout = layoutId;
         this.clickable = clickable;
         this.longClickable = longClickable;
         this.mClickListener = clickListener;
-        this.mLongClickListener = longClickListener;
+//        this.mLongClickListener = longClickListener;
     }
 
 //    public BaseRecyclerAdapter(Cursor cursor, int layoutId, int secondLayoutId, boolean clickable, boolean longClickable, OnClickListener clickListener, OnLongClickListener longClickListener) {
@@ -64,12 +63,12 @@ public abstract class BaseRecyclerAdapter extends RecyclerCursorAdapter{
         View v = LayoutInflater.from(parent.getContext()).inflate(mLayout, parent, false);
         // set the view's size, margins, padding and layout parameters
 
-        if(clickable) {
-            v.setOnClickListener(mClickListener);
-        }
-        if (longClickable) {
-            v.setOnLongClickListener(mLongClickListener);
-        }
+//        if(clickable) {
+//            v.setOnClickListener(mClickListener);
+//        }
+//        if (longClickable) {
+//            v.setOnLongClickListener((OnLongClickListener) mClickListener);
+//        }
 
         RecyclerView.ViewHolder vh = getViewHolder(v);
         return vh;

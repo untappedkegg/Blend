@@ -94,8 +94,8 @@ public class LogTag {
 //                RecipientIdCache.canonicalTableDump();
 //                RecipientIdCache.dump();
 //                Conversation.dumpThreadsTable(context);
-                Conversation.dump();
-                Conversation.dumpSmsTable(context);
+                ConversationTools.dump();
+                ConversationTools.dumpSmsTable(context);
                 Contact.dump();
             }
         }).start();
