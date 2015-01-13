@@ -1,7 +1,9 @@
 package com.untappedkegg.blend.conversations;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Fragment;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
@@ -12,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.untappedkegg.blend.AppState;
 import com.untappedkegg.blend.R;
 import com.untappedkegg.blend.data.MessagesAdapter;
 import com.untappedkegg.blend.ui.BaseRecyclerView;
@@ -48,6 +51,16 @@ public class ConversationFragment extends BaseRecyclerView {
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString() + " must implement " +  OnConversationInteractionListener.class.getSimpleName());
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        final ActionBar actionBar = getActivity().getActionBar();
+//        actionBar.setIcon(R.drawable.ic_launcher);
+        actionBar.setTitle(R.string.app_name);
+        actionBar.setDisplayHomeAsUpEnabled(false);
+        actionBar.setHomeButtonEnabled(false);
     }
 
     @Override
@@ -102,7 +115,12 @@ public class ConversationFragment extends BaseRecyclerView {
     public void onItemClick(RecyclerView parent, View v, int position) {
 //        v.setElevation(500);
         Boast.makeText(getActivity(), "Card Touched; Name = " + ((TextView) v.findViewById(R.id.contact_name)).getText().toString() + " ID = " + ((TextView) v.findViewById(R.id.contact_id)).getText().toString(), Boast.LENGTH_LONG).show();
-        mListener.onConversationSelected(((TextView) v.findViewById(R.id.contact_name)).getText().toString(), ((TextView) v.findViewById(R.id.contact_id)).getText().toString());
+//        Drawable picture = ((ImageView) v.findViewById(R.id.contact_photo)).getDrawable();
+        Bundle bundle = new Bundle();
+//        bundle.putParcelable(AppState.KEY_MSG_PHOTO, ImageUtils.drawableToBitmap(picture));
+        bundle.putString(AppState.KEY_MSG_NAME, ((TextView) v.findViewById(R.id.contact_name)).getText().toString());
+        bundle.putString(AppState.KEY_MSG_ID, ((TextView) v.findViewById(R.id.contact_id)).getText().toString());
+        mListener.onConversationSelected(bundle );
     }
 
     @Override
@@ -121,7 +139,7 @@ public class ConversationFragment extends BaseRecyclerView {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnConversationInteractionListener {
-        public void onConversationSelected(String name, String id);
+        public void onConversationSelected(Bundle bundle);
     }
 
     /*----- NESTED CLASSES -----*/

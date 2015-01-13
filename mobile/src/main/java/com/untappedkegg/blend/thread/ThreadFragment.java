@@ -1,5 +1,6 @@
 package com.untappedkegg.blend.thread;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
@@ -56,6 +57,10 @@ public class ThreadFragment extends BaseRecyclerView {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
+
+        activity.getActionBar().setDisplayHomeAsUpEnabled(true);
+        activity.getActionBar().setHomeButtonEnabled(true);
+
         try {
             mListener = (OnThreadInteractionListener) activity;
         } catch (ClassCastException e) {
@@ -66,6 +71,10 @@ public class ThreadFragment extends BaseRecyclerView {
         final Bundle bundle = getArguments();
         contactId = bundle.getString(AppState.KEY_MSG_ID);
         contactName = bundle.getString(AppState.KEY_MSG_NAME);
+
+        final ActionBar actionBar = activity.getActionBar();
+        actionBar.setTitle(contactName);
+//        actionBar.setIcon(ImageUtils.bitmapToDrawable((Bitmap) bundle.getParcelable(AppState.KEY_MSG_PHOTO)));
     }
 
     @Override

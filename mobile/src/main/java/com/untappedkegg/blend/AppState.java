@@ -26,6 +26,7 @@ public class AppState extends Application {
     /*----- BUNDLE KEYS -----*/
     public static final String KEY_MSG_ID = "message_id";
     public static final String KEY_MSG_NAME = "message_name";
+    public static final String KEY_MSG_PHOTO = "message_photo";
 
     /* ----- CONSTRUCTORS ----- */
     public AppState() {

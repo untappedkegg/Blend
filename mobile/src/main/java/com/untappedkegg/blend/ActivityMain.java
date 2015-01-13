@@ -38,16 +38,16 @@ public class ActivityMain extends Activity implements OnConversationInteractionL
 
         setContentView(R.layout.activity_main);
 
-        this.getActionBar().setDisplayHomeAsUpEnabled(true);
-        getActionBar().setHomeButtonEnabled(true);
+//        this.getActionBar().setDisplayHomeAsUpEnabled(true);
+//        getActionBar().setHomeButtonEnabled(true);
 
-        leftDrawerList = (ListView) findViewById(R.id.left_drawer);
-
-        drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
-        navigationDrawerAdapter=new ArrayAdapter<String>( this, android.R.layout.simple_list_item_1, leftSliderData);
-        leftDrawerList.setAdapter(navigationDrawerAdapter);
-
-        initDrawer();
+//        leftDrawerList = (ListView) findViewById(R.id.left_drawer);
+//
+//        drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
+//        navigationDrawerAdapter=new ArrayAdapter<String>( this, android.R.layout.simple_list_item_1, leftSliderData);
+//        leftDrawerList.setAdapter(navigationDrawerAdapter);
+//
+//        initDrawer();
 
 
         if(savedInstanceState == null)  {
@@ -60,13 +60,13 @@ public class ActivityMain extends Activity implements OnConversationInteractionL
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-        drawerToggle.syncState();
+//        drawerToggle.syncState();
     }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        drawerToggle.onConfigurationChanged(newConfig);
+//        drawerToggle.onConfigurationChanged(newConfig);
     }
 
     @Override
@@ -81,15 +81,23 @@ public class ActivityMain extends Activity implements OnConversationInteractionL
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+       switch(item.getItemId()) {
+           case android.R.id.home:
+//               final Intent parentIntent = NavUtils.getParentActivityIntent(this);
+//               if (NavUtils.shouldUpRecreateTask(this, parentIntent)) {
+//                   NavUtils.navigateUpTo(this, parentIntent);
+//               } else {
+//                   TaskStackBuilder.create(this).addParentStack(this).startActivities();
+//               }
+               getFragmentManager().popBackStackImmediate();
+               return true;
+           case R.id.action_settings:
+               return true;
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        if (drawerToggle.onOptionsItemSelected(item) || id == android.R.id.home) {
-            return true;
-        }
+       }
+//        if (drawerToggle.onOptionsItemSelected(item) || id == android.R.id.home) {
+//            return true;
+//        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -131,10 +139,7 @@ public class ActivityMain extends Activity implements OnConversationInteractionL
 
     /*----- INHERITED INTERFACES -----*/
     @Override
-    public void onConversationSelected(String name, String id) {
-        Bundle bundle = new Bundle();
-        bundle.putString(AppState.KEY_MSG_NAME, name);
-        bundle.putString(AppState.KEY_MSG_ID, id);
+    public void onConversationSelected(Bundle bundle) {
         attachFragment(new ThreadFragment(), true, bundle);
     }
 
