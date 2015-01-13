@@ -77,9 +77,9 @@ public final class MessageUtils {
     public static void printColumnsToLog(Cursor c, boolean closeCursor) {
         if(c.moveToFirst()) {
             final String[] colNames = c.getColumnNames();
-            final int colCount = c.getCount();
+            final int count = colNames.length;
             Log.e("Index", "Column_Name");
-            for(int i = 0; i < colCount; i++) {
+            for(int i = 0; i < count; i++) {
                 Log.e(String.valueOf(i), String.valueOf(colNames[i]));
             }
         } else {

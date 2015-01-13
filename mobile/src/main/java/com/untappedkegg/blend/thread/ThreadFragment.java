@@ -6,7 +6,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.support.v7.widget.RecyclerView;
 import android.view.ActionMode;
 import android.view.Menu;
@@ -20,7 +19,6 @@ import com.untappedkegg.blend.R;
 import com.untappedkegg.blend.data.MessagesAdapter;
 import com.untappedkegg.blend.ui.BaseRecyclerView;
 import com.untappedkegg.blend.ui.adapter.BaseRecyclerAdapter;
-import com.untappedkegg.blend.ui.recyclerviewextentions.RecyclerViewAdapter;
 import com.untappedkegg.blend.utils.MessageUtils;
 
 import java.text.SimpleDateFormat;
@@ -196,7 +194,7 @@ public class ThreadFragment extends BaseRecyclerView {
             }
             //mHolder.contactName.setText(MessageUtils.getContactName(phoneNum));
             mHolder.date.setText(formatter.format(calendar.getTime()));
-            mHolder.message.setText(mCursor.getString(5));
+            mHolder.message.setText(mCursor.getString(26));
             //mHolder.contactId.setText(id);
         }
 

@@ -143,7 +143,9 @@ public class ConversationFragment extends BaseRecyclerView {
             public TextView contactId;
             public ImageView contactPhoto;
 
-
+            // Provide a reference to the views for each data item
+            // Complex data items may need more than one view per item, and
+            // you provide access to all the views for a data item in a view holder
             public ConvoViewHolder(View v) {
                 super(v);
                 mView = v;
@@ -199,88 +201,4 @@ public class ConversationFragment extends BaseRecyclerView {
         }
     }
 
-/*
-    public static class ConversationRecyclerAdapter extends BaseRecyclerAdapter {
-
-        public ConversationRecyclerAdapter(Context ctx, Cursor cursor, int layoutId) {
-            super(ctx, cursor, layoutId);
-        }
-
-        public ConversationRecyclerAdapter(Context ctx, Cursor cursor, int layoutId, boolean clickable, View.OnClickListener clickListener) {
-            super(ctx, cursor, layoutId, clickable, clickListener);
-        }
-
-        public ConversationRecyclerAdapter(Context ctx, Cursor cursor, int layoutId, boolean clickable, boolean longClickable, View.OnClickListener clickListener) {
-            super(ctx, cursor, layoutId, clickable, longClickable, clickListener);
-        }
-
-        // Provide a reference to the views for each data item
-        // Complex data items may need more than one view per item, and
-        // you provide access to all the views for a data item in a view holder
-        public static class ConvoViewHolder extends RecyclerView.ViewHolder {
-            // each data item is just a string in this case
-            public View mView;
-            public TextView contactName;
-            public TextView msgPreview;
-            public TextView msgDate;
-            public TextView contactId;
-            public ImageView contactPhoto;
-
-
-            public ConvoViewHolder(View v) {
-                super(v);
-                mView = v;
-
-                contactName = (TextView) v.findViewById(R.id.contact_name);
-                msgPreview = (TextView) v.findViewById(R.id.contact_msg_preview);
-                msgDate = (TextView) v.findViewById(R.id.contact_msg_date);
-                contactPhoto = (ImageView) v.findViewById(R.id.contact_photo);
-                contactId = (TextView) v.findViewById(R.id.contact_id);
-
-            }
-        }
-
-        @Override
-        protected RecyclerView.ViewHolder getViewHolder(View v) {
-            return new ConvoViewHolder(v);
-        }
-
-        @Override
-        public void onBindViewHolder(RecyclerView.ViewHolder holder, Cursor cursor) {
-            //Must cast ViewHolder in order to access variabes
-            ConvoViewHolder mHolder = (ConvoViewHolder) holder;
-            // - get element from your data set at this position
-            // - replace the contents of the view with that element
-
-                SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy hh:mm");
-                Calendar calendar = Calendar.getInstance();
-                calendar.setTimeInMillis(mCursor.getLong(25));
-                final String phoneNum = mCursor.getString(18);
-                final String id = MessageUtils.fetchContactIdFromPhoneNumber(phoneNum);
-
-                //27 m_id
-                final Uri photoUri = MessageUtils.getPhotoUri(id);
-                if (photoUri != null) {
-                    try {
-                        mHolder.contactPhoto.setImageDrawable(MessageUtils.getDrawableFromNumber(phoneNum));
-                    } catch (Exception e) {
-                        mHolder.contactPhoto.setImageResource(R.drawable.ic_launcher);
-                    }
-                } else {
-                    // TODO: Set alternative image
-                }
-            mHolder.contactName.setText(MessageUtils.getContactName(phoneNum));
-            mHolder.msgDate.setText(formatter.format(calendar.getTime()));
-            mHolder.msgPreview.setText(mCursor.getString(26));
-            mHolder.contactId.setText(id);
-
-        }
-
-        @Override
-        protected void onContentChanged() {
-            // Nothing to do?
-        }
-
-    }
-*/
 }

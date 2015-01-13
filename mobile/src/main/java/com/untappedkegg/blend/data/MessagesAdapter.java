@@ -28,7 +28,8 @@ public class MessagesAdapter {
     public static final String QUEUERY_OUTBOX = "content://sms/outbox/";
     public static final String QUEUERY_UNDELIVERED = "content://sms/undelivered/";
     public static final String QUEUERY_SMS_ALL = "content://sms/all/";
-    public static final String QUERY_ALL = "content://mms-sms/conversations/";
+    public static final String QUERY_CONVERSATIONS = "content://mms-sms/conversations/";
+    public static final String QUERY_MESSAGES = "content://sms/";
     public static final String QUEUERY_CONVERSATIONS = "content://sms/conversations/";
 
         public static final String CONVERSATION_MSG_COUNT = "msg_count"; // col: 0
@@ -78,17 +79,17 @@ public class MessagesAdapter {
     private static final Context ctx = AppState.getApplication();
 
     public static final Cursor readAllMessages() {
-       return ctx.getContentResolver().query(Uri.parse(QUERY_ALL), null, null, null, "date DESC");
+       return ctx.getContentResolver().query(Uri.parse(QUERY_MESSAGES), null, null, null, "date DESC");
     }
 
     public static final Cursor readThreadMessages(String contactId) {
-        return ctx.getContentResolver().query(Uri.parse(QUERY_ALL), null, String.format("%s == %s", ContactsContract.PhoneLookup._ID, contactId), null, "date DESC");
+        return ctx.getContentResolver().query(Uri.parse(QUERY_CONVERSATIONS), null, String.format("%s = %s", "thread_id", contactId), null, "date DESC");
     }
 
     public static ArrayList<Conversation> conversationsToArrayList() {
 
 
-        final Cursor c = ctx.getContentResolver().query(Uri.parse(QUERY_ALL), null, null, null, "date DESC");
+        final Cursor c = ctx.getContentResolver().query(Uri.parse(QUERY_CONVERSATIONS), null, null, null, "date DESC");
 
         if(c.moveToFirst()) {
             final String[] colNames = c.getColumnNames();

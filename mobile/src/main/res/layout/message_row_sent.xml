@@ -7,6 +7,8 @@
     <ImageView android:id="@+id/contact"
         style="@style/ContactBadge"
         android:layout_alignParentRight="true"
+        android:minWidth="70dp"
+        android:scaleType="fitCenter"
         android:src="@drawable/ic_launcher"/>
 
     <!-- On Sent Messages, @Override the style -->
