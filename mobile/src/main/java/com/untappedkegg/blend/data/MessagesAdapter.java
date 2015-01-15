@@ -128,6 +128,7 @@ public class MessagesAdapter {
             return mList;
 
         } else {
+            c.close();
             Log.e("Error", "Cursor is null or empty");
         }
             return null;

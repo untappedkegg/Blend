@@ -65,23 +65,8 @@ public class AppState extends Application {
         Contact.init(this);
 //        Conversation.init(this);
 
-        activePendingMessages();
     }
 
-    /**
-     * Try to process all pending messages(which were interrupted by user, OOM, Mms crashing,
-     * etc...) when Mms app is (re)launched.
-     */
-    private void activePendingMessages() {
-        // For Mms: try to process all pending transactions if possible
-//        MmsSystemEventReceiver.wakeUpService(this);
-
-        // For Sms: retry to send smses in outbox and queued box
-//        sendBroadcast(new Intent(SmsReceiverService.ACTION_SEND_INACTIVE_MESSAGE,
-//                null,
-//                this,
-//                SmsReceiver.class));
-    }
 
 
     @Override
@@ -156,10 +141,7 @@ public class AppState extends Application {
         if (str == null || prefix == null) {
             return (str == null && prefix == null);
         }
-        if (prefix.length() > str.length()) {
-            return false;
-        }
-        return str.regionMatches(true, 0, prefix, 0, prefix.length());
+        return prefix.length() <= str.length() && str.regionMatches(true, 0, prefix, 0, prefix.length());
     }
 
 
