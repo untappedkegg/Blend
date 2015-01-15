@@ -106,7 +106,7 @@ public class MessagesAdapter {
             final int snippetCol = c.getColumnIndex(SNIPPET);
             final int phoneNumCol = c.getColumnIndex(FROM_ADDRESS);
             final int dateCol = c.getColumnIndex(DATE_IN_MILLIS);
-            ArrayList<Conversation> mList = new ArrayList<>(count);
+            ArrayList<Conversation> mList = new ArrayList<>();
 
             for (int j = 0; j < count; j++) {
                 c.moveToPosition(j);
