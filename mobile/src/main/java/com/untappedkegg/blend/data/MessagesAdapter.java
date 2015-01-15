@@ -29,6 +29,13 @@ public class MessagesAdapter {
     public static final String QUEUERY_UNDELIVERED = "content://sms/undelivered/";
     public static final String QUEUERY_SMS_ALL = "content://sms/all/";
     public static final String QUERY_CONVERSATIONS = "content://mms-sms/conversations/";
+
+        public static final String FROM_ADDRESS = "address";
+        public static final String DATE_IN_MILLIS = "date";
+        public static final String THREAD_ID = "thread_id";
+        public static final String SNIPPET = "body";
+        public static final String PERSON_ID = "person";
+
     public static final String QUERY_MESSAGES = "content://sms/";
     public static final String QUEUERY_CONVERSATIONS = "content://sms/conversations/";
 
@@ -83,28 +90,32 @@ public class MessagesAdapter {
     }
 
     public static final Cursor readThreadMessages(String contactId) {
-        return ctx.getContentResolver().query(Uri.parse(QUERY_CONVERSATIONS), null, String.format("%s = %s", "thread_id", contactId), null, "date DESC");
+        return ctx.getContentResolver().query(Uri.parse(QUERY_CONVERSATIONS), null, String.format("%s = %s", THREAD_ID, contactId), null, "date DESC");
     }
 
     public static ArrayList<Conversation> conversationsToArrayList() {
 
 
         final Cursor c = ctx.getContentResolver().query(Uri.parse(QUERY_CONVERSATIONS), null, null, null, "date DESC");
-
+//MessageUtils.printMessagesToLog(c,false);
         if(c.moveToFirst()) {
-            final String[] colNames = c.getColumnNames();
-            final int colCount = c.getColumnCount();
             final int count = c.getCount();
+
+//            final int personIdCol = c.getColumnIndex(PERSON_ID);
+            final int threadIdCol = c.getColumnIndex(THREAD_ID);
+            final int snippetCol = c.getColumnIndex(SNIPPET);
+            final int phoneNumCol = c.getColumnIndex(FROM_ADDRESS);
+            final int dateCol = c.getColumnIndex(DATE_IN_MILLIS);
             ArrayList<Conversation> mList = new ArrayList<>(count);
 
             for (int j = 0; j < count; j++) {
                 c.moveToPosition(j);
-                final String phoneNumber = c.getString(18);
+                final String phoneNumber = c.getString(phoneNumCol);
                 SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy hh:mm");
                 Calendar calendar = Calendar.getInstance();
-                calendar.setTimeInMillis(c.getLong(25));
+                calendar.setTimeInMillis(c.getLong(dateCol));
 //                Log.e(LOG_TAG, String.format("name = %s, Thread_ID = %s, Snippet = %s, date = %s, photo = %s", MessageUtils.getContactName(phoneNumber) , MessageUtils.fetchContactIdFromPhoneNumber(phoneNumber), c.getString(26), formatter.format(calendar.getTime()), MessageUtils.getDrawableFromNumber(phoneNumber).toString()));
-                mList.add(new Conversation(MessageUtils.getContactName(phoneNumber) ,null, /*MessageUtils.fetchContactIdFromPhoneNumber(phoneNumber)*/ c.getString(31), c.getString(26), formatter.format(calendar.getTime()), MessageUtils.getDrawableFromNumber(phoneNumber)));
+                mList.add(new Conversation(MessageUtils.getContactName(phoneNumber) ,null, c.getString(threadIdCol), c.getString(snippetCol), formatter.format(calendar.getTime()), MessageUtils.getDrawableFromNumber(phoneNumber)));
 
             }
             c.close();
