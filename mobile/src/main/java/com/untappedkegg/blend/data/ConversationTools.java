@@ -18,7 +18,7 @@ import android.provider.Telephony.Threads;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.untappedkegg.blend.AppState;
+import com.untappedkegg.blend.BuildConfig;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -97,7 +97,7 @@ public class ConversationTools {
 
 /*
     private Conversation(Context context, long threadId, boolean allowQuery) {
-        if (AppState.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Log.v(TAG, "Conversation constructor threadId: " + threadId);
         }
         mContext = context;
@@ -108,7 +108,7 @@ public class ConversationTools {
     }
 
     private Conversation(Context context, Cursor cursor, boolean allowQuery) {
-        if (AppState.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Log.v(TAG, "Conversation constructor cursor, allowQuery: " + allowQuery);
         }
         mContext = context;
@@ -129,7 +129,7 @@ public class ConversationTools {
      * Find the conversation matching the provided thread ID.
      */
     public static ConversationTools get(Context context, long threadId, boolean allowQuery) {
-        if (AppState.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Log.v(TAG, "Conversation get by threadId: " + threadId);
         }
         ConversationTools conv = Cache.get(threadId);
@@ -153,7 +153,7 @@ public class ConversationTools {
      * When called with an empty recipient list, equivalent to {@link #createNew}.
      */
    /* public static Conversation get(Context context, ContactList recipients, boolean allowQuery) {
-        if (AppState.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Log.v(TAG, "Conversation get by recipients: " + recipients.serialize());
         }
         // If there are no recipients in the list, make a new conversation.
@@ -195,20 +195,20 @@ public class ConversationTools {
      */
 /*
     public static Conversation get(Context context, Uri uri, boolean allowQuery) {
-        if (AppState.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Log.v(TAG, "Conversation get by uri: " + uri);
         }
         if (uri == null) {
             return createNew(context);
         }
 
-        if (AppState.DEBUG) Log.v(TAG, "Conversation get URI: " + uri);
+        if (BuildConfig.DEBUG) Log.v(TAG, "Conversation get URI: " + uri);
 
         // Handle a conversation URI
         if (uri.getPathSegments().size() >= 2) {
             try {
                 long threadId = Long.parseLong(uri.getPathSegments().get(1));
-                if (AppState.DEBUG) {
+                if (BuildConfig.DEBUG) {
                     Log.v(TAG, "Conversation get threadId: " + threadId);
                 }
                 return get(context, threadId, allowQuery);
@@ -253,7 +253,7 @@ public class ConversationTools {
             incomingRecipient = ContactList.getByNumbers(recipient,
                     false *//* don't block *//*, false *//* don't replace number *//*);
         }
-        if (AppState.DEBUG) Log.v(TAG, "sameRecipient incomingRecipient: " + incomingRecipient +
+        if (BuildConfig.DEBUG) Log.v(TAG, "sameRecipient incomingRecipient: " + incomingRecipient +
                 " mRecipients: " + mRecipients);
         return mRecipients.equals(incomingRecipient);
     }
@@ -338,7 +338,7 @@ public class ConversationTools {
      * always be called from the UI thread.
      */
     public void markAsRead() {
-        if (AppState.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Contact.logWithTrace(TAG, "markAsRead mMarkAsReadWaiting: " + mMarkAsReadWaiting +
                     " mMarkAsReadBlocked: " + mMarkAsReadBlocked);
         }
@@ -356,7 +356,7 @@ public class ConversationTools {
 
         new AsyncTask<Void, Void, Void>() {
             protected Void doInBackground(Void... none) {
-                if (AppState.DEBUG || Log.isLoggable(LogTag.APP, Log.VERBOSE)) {
+                if (BuildConfig.DEBUG || Log.isLoggable(LogTag.APP, Log.VERBOSE)) {
                     LogTag.debug("markAsRead.doInBackground");
                 }
                 // If we have no Uri to mark (as in the case of a conversation that
@@ -405,7 +405,7 @@ public class ConversationTools {
      * can mark messages as read. Only call this function on the UI thread.
      */
     public void blockMarkAsRead(boolean block) {
-        if (AppState.DEBUG || Log.isLoggable(LogTag.APP, Log.VERBOSE)) {
+        if (BuildConfig.DEBUG || Log.isLoggable(LogTag.APP, Log.VERBOSE)) {
             LogTag.debug("blockMarkAsRead: " + block);
         }
 
@@ -456,13 +456,13 @@ public class ConversationTools {
      * @return The thread ID of this conversation in the database
      */
     public synchronized long ensureThreadId() {
-        if (AppState.DEBUG || AppState.DEBUG) {
+        if (BuildConfig.DEBUG || BuildConfig.DEBUG) {
             LogTag.debug("ensureThreadId before: " + mThreadId);
         }
 //        if (mThreadId <= 0) {
 //            mThreadId = getOrCreateThreadId(mContext, mRecipients);
 //        }
-        if (AppState.DEBUG || AppState.DEBUG) {
+        if (BuildConfig.DEBUG || BuildConfig.DEBUG) {
             LogTag.debug("ensureThreadId after: " + mThreadId);
         }
 
@@ -608,7 +608,7 @@ public class ConversationTools {
             }
         }
         synchronized(sDeletingThreadsLock) {
-            if (AppState.DEBUG) {
+            if (BuildConfig.DEBUG) {
                 ComposeMessageActivity.log("Conversation getOrCreateThreadId for: " +
                         list.formatNamesAndNumbers(",") + " sDeletingThreads: " + sDeletingThreads);
             }
@@ -628,7 +628,7 @@ public class ConversationTools {
                 }
             }
             long retVal = Threads.getOrCreateThreadId(context, recipients);
-            if (AppState.DEBUG || Log.isLoggable(LogTag.APP, Log.VERBOSE)) {
+            if (BuildConfig.DEBUG || Log.isLoggable(LogTag.APP, Log.VERBOSE)) {
                 LogTag.debug("[Conversation] getOrCreateThreadId for (%s) returned %d",
                         recipients, retVal);
             }
@@ -638,7 +638,7 @@ public class ConversationTools {
 
     public static long getOrCreateThreadId(Context context, String address) {
         synchronized(sDeletingThreadsLock) {
-            if (AppState.DEBUG) {
+            if (BuildConfig.DEBUG) {
                 ComposeMessageActivity.log("Conversation getOrCreateThreadId for: " +
                         address + " sDeletingThreads: " + sDeletingThreads);
             }
@@ -658,7 +658,7 @@ public class ConversationTools {
                 }
             }
 //            long retVal = Threads.getOrCreateThreadId(context, address);
-            if (AppState.DEBUG || Log.isLoggable(LogTag.APP, Log.VERBOSE)) {
+            if (BuildConfig.DEBUG || Log.isLoggable(LogTag.APP, Log.VERBOSE)) {
                 LogTag.debug("[Conversation] getOrCreateThreadId for (%s) returned %d",
                         address, retVal);
             }
@@ -751,7 +751,7 @@ public class ConversationTools {
     public static void startDelete(ConversationQueryHandler handler, int token, boolean deleteAll,
             Collection<Long> threadIds) {
         synchronized(sDeletingThreadsLock) {
-            if (AppState.DEBUG) {
+            if (BuildConfig.DEBUG) {
                 Log.v(TAG, "Conversation startDelete sDeletingThreads: " +
                         sDeletingThreads);
             }
@@ -783,7 +783,7 @@ public class ConversationTools {
     public static void startDeleteAll(ConversationQueryHandler handler, int token,
             boolean deleteAll) {
         synchronized(sDeletingThreadsLock) {
-            if (AppState.DEBUG) {
+            if (BuildConfig.DEBUG) {
                 Log.v(TAG, "Conversation startDeleteAll sDeletingThreads: " +
                                 sDeletingThreads);
             }
@@ -825,7 +825,7 @@ public class ConversationTools {
                 // release lock
                 synchronized(sDeletingThreadsLock) {
                     sDeletingThreads = false;
-                    if (AppState.DEBUG) {
+                    if (BuildConfig.DEBUG) {
                         Log.v(TAG, "Conversation onDeleteComplete sDeletingThreads: " +
                                         sDeletingThreads);
                     }
@@ -945,7 +945,7 @@ public class ConversationTools {
                     LogTag.debug("Conversation get with threadId: " + threadId);
                 }
                 for (ConversationTools c : sInstance.mCache) {
-                    if (AppState.DEBUG) {
+                    if (BuildConfig.DEBUG) {
                         LogTag.debug("Conversation get() threadId: " + threadId +
                                 " c.getThreadId(): " + c.getThreadId());
                     }
@@ -989,7 +989,7 @@ public class ConversationTools {
                 }
 
                 if (sInstance.mCache.contains(c)) {
-                    if (AppState.DEBUG) {
+                    if (BuildConfig.DEBUG) {
                         dumpCache();
                     }
                     throw new IllegalStateException("cache already contains " + c +
@@ -1015,7 +1015,7 @@ public class ConversationTools {
                 }
 
                 if (!sInstance.mCache.contains(c)) {
-                    if (AppState.DEBUG) {
+                    if (BuildConfig.DEBUG) {
                         dumpCache();
                     }
                     return false;
@@ -1033,7 +1033,7 @@ public class ConversationTools {
 
         static void remove(long threadId) {
             synchronized (sInstance) {
-                if (AppState.DEBUG) {
+                if (BuildConfig.DEBUG) {
                     LogTag.debug("remove threadid: " + threadId);
                     dumpCache();
                 }
@@ -1069,7 +1069,7 @@ public class ConversationTools {
                     }
                 }
             }
-            if (AppState.DEBUG) {
+            if (BuildConfig.DEBUG) {
                 LogTag.debug("after keepOnly");
                 dumpCache();
             }
@@ -1094,14 +1094,14 @@ public class ConversationTools {
 */
 
     public static void markAllConversationsAsSeen(final Context context) {
-        if (AppState.DEBUG || AppState.DEBUG) {
+        if (BuildConfig.DEBUG || BuildConfig.DEBUG) {
             Contact.logWithTrace(TAG, "Conversation.markAllConversationsAsSeen");
         }
 
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                if (AppState.DEBUG) {
+                if (BuildConfig.DEBUG) {
                     Log.d(TAG, "Conversation.markAllConversationsAsSeen.run");
                 }
                 blockingMarkAllSmsMessagesAsSeen(context);
@@ -1137,7 +1137,7 @@ public class ConversationTools {
             return;
         }
 
-        if (AppState.DEBUG || Log.isLoggable(LogTag.APP, Log.VERBOSE)) {
+        if (BuildConfig.DEBUG || Log.isLoggable(LogTag.APP, Log.VERBOSE)) {
             Log.d(TAG, "mark " + count + " SMS msgs as seen");
         }
 
@@ -1172,7 +1172,7 @@ public class ConversationTools {
             return;
         }
 
-        if (AppState.DEBUG || Log.isLoggable(LogTag.APP, Log.VERBOSE)) {
+        if (BuildConfig.DEBUG || Log.isLoggable(LogTag.APP, Log.VERBOSE)) {
             Log.d(TAG, "mark " + count + " MMS msgs as seen");
         }
 

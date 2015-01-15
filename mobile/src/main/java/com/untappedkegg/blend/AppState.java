@@ -15,6 +15,10 @@ import com.untappedkegg.blend.data.Contact;
  */
 public class AppState extends Application {
 
+    @Deprecated
+    /**
+     * use {@code BuildConfig.DEBUG instead}, it gets set automagically
+     */
     public static final boolean DEBUG = true;
 
     private SearchRecentSuggestions mRecentSuggestions;
@@ -45,7 +49,7 @@ public class AppState extends Application {
     public void onCreate() {
         super.onCreate();
 
-        if (DEBUG) {
+        if (BuildConfig.DEBUG) {
             // Log tag for enabling/disabling StrictMode violation log. This will dump a stack
             // in the log that shows the StrictMode violator.
             // To enable: adb shell setprop log.tag.Mms:strictmode DEBUG

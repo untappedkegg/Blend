@@ -12,6 +12,7 @@ import android.provider.ContactsContract.PhoneLookup;
 import android.util.Log;
 
 import com.untappedkegg.blend.AppState;
+import com.untappedkegg.blend.BuildConfig;
 import com.untappedkegg.blend.MmsConfig;
 import com.untappedkegg.blend.R;
 
@@ -255,7 +256,7 @@ public final class MessageUtils {
             return name;
         } catch (Exception e) {
 //            Log.e(LOG_TAG, phoneNum);
-            if (AppState.DEBUG) {
+            if (BuildConfig.DEBUG) {
                 e.printStackTrace();
             }
             return phoneNum;
