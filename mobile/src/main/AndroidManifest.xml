@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.untappedkegg.blend" >
 
+    <uses-feature android:name="android.hardware.telephony" android:required="true"></uses-feature>
+
     <!-- SMS/MMS -->
     <uses-permission android:name="android.permission.READ_SMS"></uses-permission>
     <uses-permission android:name="android.permission.RECEIVE_SMS"></uses-permission>
