@@ -7,7 +7,8 @@
     <ImageView android:id="@+id/contact"
         style="@style/ContactBadge"
         android:layout_alignParentRight="true"
-        android:minWidth="70dp"
+        android:minWidth="50dp"
+        android:minHeight="50dp"
         android:scaleType="fitCenter"
         android:src="@drawable/ic_launcher"/>
 

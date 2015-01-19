@@ -54,17 +54,17 @@ public class MessagesAdapter {
     public static class TextMessage {
         /*----- VARIABLES -----*/
         public String name;
-        public String phoneNumber;
         public String snippet;
         public String threadId;
-        public Uri photoUri;
+        public String date;
+        public Drawable photo;
 
-        public TextMessage(String name, String phoneNumber, String snippet, String threadId, Uri photoUri) {
+        public TextMessage(String name, String snippet, String threadId, String date, Drawable photo) {
             this.name = name;
-            this.phoneNumber = phoneNumber;
             this.snippet = snippet;
             this.threadId = threadId;
-            this.photoUri = photoUri;
+            this.photo = photo;
+            this.date = date;
         }
     }
 
@@ -106,7 +106,6 @@ public class MessagesAdapter {
 
         if(c.moveToFirst()) {
             final int count = c.getCount();
-
             final int threadIdCol = c.getColumnIndex(TextBasedSmsColumns.THREAD_ID);
             final int snippetCol = c.getColumnIndex(TextBasedSmsColumns.BODY);
             final int phoneNumCol = c.getColumnIndex(TextBasedSmsColumns.ADDRESS);
@@ -132,6 +131,42 @@ public class MessagesAdapter {
             Log.e("Error", "Cursor is null or empty");
         }
             return null;
+
+    }
+
+    public static ArrayList<TextMessage> threadToArrayList(String threadId) {
+
+
+        final Cursor c = ctx.getContentResolver().query(MmsSms.CONTENT_CONVERSATIONS_URI, null, String.format("%s = %s", TextBasedSmsColumns.THREAD_ID, threadId), null, "date DESC");
+
+        if(c.moveToFirst()) {
+            final int count = c.getCount();
+MessageUtils.printMessagesToLog(c, false);
+            final int threadIdCol = c.getColumnIndex(TextBasedSmsColumns.THREAD_ID);
+            final int snippetCol = c.getColumnIndex(TextBasedSmsColumns.BODY);
+            final int phoneNumCol = c.getColumnIndex(TextBasedSmsColumns.ADDRESS);
+            final int dateCol = c.getColumnIndex(TextBasedSmsColumns.DATE);
+            final int readCol = c.getColumnIndex(TextBasedSmsColumns.READ);
+            ArrayList<TextMessage> mList = new ArrayList<>();
+
+            for (int j = 0; j < count; j++) {
+                c.moveToPosition(j);
+                final String phoneNumber = c.getString(phoneNumCol);
+                SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy hh:mm");
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTimeInMillis(c.getLong(dateCol));
+//                Log.e(LOG_TAG, String.format("name = %s, Thread_ID = %s, Snippet = %s, date = %s, photo = %s", MessageUtils.getContactName(phoneNumber) , MessageUtils.fetchContactIdFromPhoneNumber(phoneNumber), c.getString(26), formatter.format(calendar.getTime()), MessageUtils.getDrawableFromNumber(phoneNumber).toString()));
+                mList.add(new TextMessage(MessageUtils.getContactName(phoneNumber), c.getString(snippetCol), c.getString(threadIdCol), formatter.format(calendar.getTime()),  MessageUtils.getDrawableFromNumber(phoneNumber)));
+Log.e("test", c.getString(snippetCol));
+            }
+            c.close();
+            return mList;
+
+        } else {
+            c.close();
+            Log.e("Error", "Cursor is null or empty");
+        }
+        return null;
 
     }
 

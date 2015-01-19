@@ -8,10 +8,13 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.ActionMode;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -20,9 +23,11 @@ import com.untappedkegg.blend.R;
 import com.untappedkegg.blend.data.MessagesAdapter;
 import com.untappedkegg.blend.ui.BaseRecyclerView;
 import com.untappedkegg.blend.ui.adapter.BaseRecyclerAdapter;
+import com.untappedkegg.blend.ui.recyclerviewextentions.RecyclerViewAdapter;
 import com.untappedkegg.blend.utils.MessageUtils;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 
 /**
@@ -35,7 +40,7 @@ public class ThreadFragment extends BaseRecyclerView {
 
     /*----- VARIABLES -----*/
     private OnThreadInteractionListener mListener;
-    private String contactId, contactName;
+    private String threadId, contactName;
 
     public ThreadFragment() {
         // Required empty public constructor
@@ -44,7 +49,8 @@ public class ThreadFragment extends BaseRecyclerView {
 
     @Override
     protected RecyclerView.Adapter getAdapter() {
-        return new ThreadRecyclerAdapter(getActivity(), MessagesAdapter.readThreadMessages(contactId), R.layout.message_row_sent);
+        return new ThreadRecyclerAdapter(threadId);
+        // return new ThreadRecyclerAdapter(getActivity(), MessagesAdapter.readThreadMessages(contactId), R.layout.message_row_sent);
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -69,7 +75,7 @@ public class ThreadFragment extends BaseRecyclerView {
         }
 
         final Bundle bundle = getArguments();
-        contactId = bundle.getString(AppState.KEY_MSG_ID);
+        threadId = bundle.getString(AppState.KEY_MSG_ID);
         contactName = bundle.getString(AppState.KEY_MSG_NAME);
 
         final ActionBar actionBar = activity.getActionBar();
@@ -139,18 +145,22 @@ public class ThreadFragment extends BaseRecyclerView {
 
     }
 
-    public static class ThreadRecyclerAdapter extends BaseRecyclerAdapter {
+    /*----- NESTED CLASSES -----*/
+    public static class ThreadRecyclerAdapter extends RecyclerViewAdapter {
 
-        public ThreadRecyclerAdapter(Context ctx, Cursor cursor, int layoutId) {
-            super(ctx, cursor, layoutId);
+        ArrayList<MessagesAdapter.TextMessage> items;
+        ThreadRecyclerAdapter(String threadId) {
+            items = new ArrayList<>(MessagesAdapter.threadToArrayList(threadId)); //MessagesAdapter.conversationsToArrayList();
         }
 
-        public ThreadRecyclerAdapter(Context ctx, Cursor cursor, int layoutId, boolean clickable, View.OnClickListener clickListener) {
-            super(ctx, cursor, layoutId, clickable, clickListener);
-        }
+        @Override
+        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            // create a new view
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.message_row_sent, parent, false);
+            // set the view's size, margins, padding and layout parameters
 
-        public ThreadRecyclerAdapter(Context ctx, Cursor cursor, int layoutId, boolean clickable, boolean longClickable, View.OnClickListener clickListener) {
-            super(ctx, cursor, layoutId, clickable, longClickable, clickListener);
+            RecyclerView.ViewHolder vh = new ThreadViewHolder(v);
+            return vh;
         }
 
         // Provide a reference to the views for each data item
@@ -165,7 +175,6 @@ public class ThreadFragment extends BaseRecyclerView {
             public ThreadViewHolder(View v) {
                 super(v);
                 mView = v;
-
                 contact = (ImageView) v.findViewById(R.id.contact);
                 message = (TextView) v.findViewById(R.id.message);
                 date = (TextView) v.findViewById(R.id.date);
@@ -173,43 +182,31 @@ public class ThreadFragment extends BaseRecyclerView {
         }
 
         @Override
-        protected RecyclerView.ViewHolder getViewHolder(View v) {
-            return new ThreadViewHolder(v);
-        }
-
-        @Override
-        public void onBindViewHolder(RecyclerView.ViewHolder holder, Cursor cursor) {
+        public void onBindViewData(RecyclerView.ViewHolder viewHolder, int position) {
             //Must cast ViewHolder in order to access variabes
-            ThreadViewHolder mHolder = (ThreadViewHolder) holder;
-            // - get element from your data set at this position
-            // - replace the contents of the view with that element
+            ThreadViewHolder mHolder = (ThreadViewHolder) viewHolder;
+            MessagesAdapter.TextMessage mText = items.get(position);
 
-            SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy hh:mm");
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTimeInMillis(mCursor.getLong(25));
-            final String phoneNum = mCursor.getString(18);
-            final String id = MessageUtils.fetchContactIdFromPhoneNumber(phoneNum);
-
-            //27 m_id
-            final Uri photoUri = MessageUtils.getPhotoUri(id);
-            if (photoUri != null) {
-                try {
-                    mHolder.contact.setImageDrawable(MessageUtils.getDrawableFromNumber(phoneNum));
-                } catch (Exception e) {
-                    mHolder.contact.setImageResource(R.drawable.ic_launcher);
-                }
-            } else {
-                // TODO: Set alternative image
+            try {
+                mHolder.contact.setImageDrawable(mText.photo);
+            } catch (Exception e) {
+                mHolder.contact.setImageResource(R.drawable.ic_launcher);
             }
+
             //mHolder.contactName.setText(MessageUtils.getContactName(phoneNum));
-            mHolder.date.setText(formatter.format(calendar.getTime()));
-            mHolder.message.setText(mCursor.getString(26));
+            mHolder.date.setText(mText.date);
+            mHolder.message.setText(mText.snippet);
             //mHolder.contactId.setText(id);
         }
 
         @Override
-        protected void onContentChanged() {
-            //not sure what to do here yet
+        public void removeItem(int position) {
+            items.remove(position);
+        }
+
+        @Override
+        public int getItemCount() {
+            return items.size();
         }
     }
 
