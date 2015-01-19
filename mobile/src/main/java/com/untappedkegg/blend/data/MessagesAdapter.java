@@ -3,7 +3,7 @@ package com.untappedkegg.blend.data;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
+import android.provider.Telephony;
 import android.provider.Telephony.MmsSms;
 import android.provider.Telephony.TextBasedSmsColumns;
 import android.util.Log;
@@ -136,12 +136,12 @@ public class MessagesAdapter {
 
     public static ArrayList<TextMessage> threadToArrayList(String threadId) {
 
-
-        final Cursor c = ctx.getContentResolver().query(MmsSms.CONTENT_CONVERSATIONS_URI, null, String.format("%s = %s", TextBasedSmsColumns.THREAD_ID, threadId), null, "date DESC");
+//                Log.w(LOG_TAG, String.format("SELECT * FROM %s WHERE %s = %s", Telephony.Sms.CONTENT_URI, TextBasedSmsColumns.THREAD_ID, threadId));
+        final Cursor c = ctx.getContentResolver().query(Telephony.Sms.CONTENT_URI, null, String.format("%s = %s", TextBasedSmsColumns.THREAD_ID, threadId), null, Telephony.Sms.DEFAULT_SORT_ORDER);
 
         if(c.moveToFirst()) {
             final int count = c.getCount();
-MessageUtils.printMessagesToLog(c, false);
+//MessageUtils.printMessagesToLog(c, false);
             final int threadIdCol = c.getColumnIndex(TextBasedSmsColumns.THREAD_ID);
             final int snippetCol = c.getColumnIndex(TextBasedSmsColumns.BODY);
             final int phoneNumCol = c.getColumnIndex(TextBasedSmsColumns.ADDRESS);
@@ -157,7 +157,7 @@ MessageUtils.printMessagesToLog(c, false);
                 calendar.setTimeInMillis(c.getLong(dateCol));
 //                Log.e(LOG_TAG, String.format("name = %s, Thread_ID = %s, Snippet = %s, date = %s, photo = %s", MessageUtils.getContactName(phoneNumber) , MessageUtils.fetchContactIdFromPhoneNumber(phoneNumber), c.getString(26), formatter.format(calendar.getTime()), MessageUtils.getDrawableFromNumber(phoneNumber).toString()));
                 mList.add(new TextMessage(MessageUtils.getContactName(phoneNumber), c.getString(snippetCol), c.getString(threadIdCol), formatter.format(calendar.getTime()),  MessageUtils.getDrawableFromNumber(phoneNumber)));
-Log.e("test", c.getString(snippetCol));
+//Log.e("test", c.getString(snippetCol));
             }
             c.close();
             return mList;

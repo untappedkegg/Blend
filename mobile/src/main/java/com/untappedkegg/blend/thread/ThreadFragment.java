@@ -3,12 +3,9 @@ package com.untappedkegg.blend.thread;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Fragment;
-import android.content.Context;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -22,13 +19,9 @@ import com.untappedkegg.blend.AppState;
 import com.untappedkegg.blend.R;
 import com.untappedkegg.blend.data.MessagesAdapter;
 import com.untappedkegg.blend.ui.BaseRecyclerView;
-import com.untappedkegg.blend.ui.adapter.BaseRecyclerAdapter;
 import com.untappedkegg.blend.ui.recyclerviewextentions.RecyclerViewAdapter;
-import com.untappedkegg.blend.utils.MessageUtils;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -51,6 +44,11 @@ public class ThreadFragment extends BaseRecyclerView {
     protected RecyclerView.Adapter getAdapter() {
         return new ThreadRecyclerAdapter(threadId);
         // return new ThreadRecyclerAdapter(getActivity(), MessagesAdapter.readThreadMessages(contactId), R.layout.message_row_sent);
+    }
+
+    @Override
+    protected boolean shouldUseReverseLayout() {
+        return true;
     }
 
     // TODO: Rename method, update argument and hook method into UI event

@@ -3,6 +3,7 @@ package com.untappedkegg.blend.ui;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.ActionMode;
@@ -42,6 +43,12 @@ public abstract class BaseRecyclerView extends Fragment implements ItemTouchList
 
         // use a linear layout manager
         mLayoutManager = getLayoutManager();
+        if (mLayoutManager instanceof LinearLayoutManager) {
+            ((LinearLayoutManager)mLayoutManager).setReverseLayout(shouldUseReverseLayout());
+        }
+        if (mLayoutManager instanceof GridLayoutManager) {
+            ((GridLayoutManager)mLayoutManager).setReverseLayout(shouldUseReverseLayout());
+        }
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         // specify an adapter (see also next example)
@@ -72,6 +79,8 @@ public abstract class BaseRecyclerView extends Fragment implements ItemTouchList
     }
 
     protected abstract RecyclerView.Adapter getAdapter();
+
+    protected abstract boolean shouldUseReverseLayout();
 
     /**
      * {@see https://github.com/ismoli/DynamicRecyclerView}

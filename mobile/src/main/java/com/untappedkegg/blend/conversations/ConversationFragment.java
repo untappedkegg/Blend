@@ -76,6 +76,11 @@ public class ConversationFragment extends BaseRecyclerView {
         return new ConversationRecyclerAdapter();
     }
 
+    @Override
+    protected boolean shouldUseReverseLayout() {
+        return false;
+    }
+
 //    @Override
 //    public void onClick(View v) {
 //        // TODO get name and id
